@@ -6,7 +6,7 @@ version = '0.1'
 setup(name='collective.listusers',
       version=version,
       description="A search form for listing users.",
-      long_description=open("README").read() + "\n" +
+      long_description=open("README.rst").read() + "\n" +
           open(os.path.join("docs", "FUTURE.rst")).read() + "\n" +
           open(os.path.join("docs", "CREDITS.rst")).read() + "\n" +
           open(os.path.join("docs", "HISTORY.rst")).read() + "\n" +
