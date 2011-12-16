@@ -1,16 +1,20 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.1'
+
+def read(*rnames):
+    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+
+version = read('collective', 'listusers', 'version.txt').strip()
 
 setup(name='collective.listusers',
       version=version,
       description="A search form for listing users.",
-      long_description=open("README.rst").read() + "\n" +
-          open(os.path.join("docs", "FUTURE.rst")).read() + "\n" +
-          open(os.path.join("docs", "CREDITS.rst")).read() + "\n" +
-          open(os.path.join("docs", "HISTORY.rst")).read() + "\n" +
-          open(os.path.join("docs", "LICENSE.rst")).read(),
+      long_description=open('README.rst').read() + "\n" +
+          read('docs', 'FUTURE.rst') + "\n" +
+          read('docs', 'CREDITS.rst') + "\n" +
+          read('docs', 'HISTORY.rst') + "\n" +
+          read('docs', 'LICENSE.rst'),
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[

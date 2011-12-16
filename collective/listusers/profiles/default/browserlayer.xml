@@ -1,0 +1,4 @@
+<layers>
+  <layer name="collective.listusers"
+         interface="collective.listusers.interfaces.IListUsersLayer" />
+</layers>
