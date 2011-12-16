@@ -2,7 +2,7 @@
 Search form for listing users
 =============================
 
-Search form queries users via PAS, user could be from source_users as
+A Plone 4 add-on to queries users via PAS, user could be from source_users as
 well as ldap.
 
 An alphabetical list of groups is to be presented in multiple columns
@@ -24,3 +24,15 @@ user's groups.
 AJAX would be great, but not mandatory.
 
 They will themselves register the search form (zcml) where needed.
+
+* `Source code @ GitHub <http://github.com/collective/collective.listusers>`_
+* `Releases @ PyPI <http://pypi.python.org/pypi/collective.listusers>`_
+* `Sphinx docs @ ReadTheDocs <http://readthedocs.org/docs/collectivelistusers>`_
+
+Installation
+============
+
+To install `collective.listusers` you simply add ``collective.listusers``
+to the list of eggs in your ``buildout.cfg``, re-run buildout and restart Plone.
+Then, install `collective.listusers` using the Add-ons control panel.
+
