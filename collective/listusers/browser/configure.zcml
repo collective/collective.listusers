@@ -12,8 +12,8 @@
 
 <!--   <browser:page
     name="listusers"
-    for="Products.CMFCore.interfaces.ISiteRoot"
-    class=".list.ListUsersView"
+    for="plone.app.layout.navigation.interfaces.INavigationRoot"
+    class=".list.ListUsersForm"
     permission="cmf.ManageUsers"
     />
  -->
