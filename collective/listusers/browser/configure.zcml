@@ -12,9 +12,18 @@
 
   <!-- Register list users form -->
   <browser:page
-    name="listusers"
+    name="listusersform"
     for="plone.app.layout.navigation.interfaces.INavigationRoot"
     class=".listusers.ListUsersForm"
+    permission="zope2.ManageUsers"
+    layer="collective.listusers.interfaces.IListUsersLayer"
+    />
+
+  <!-- Register list users view -->
+  <browser:page
+    name="listusers"
+    for="plone.app.layout.navigation.interfaces.INavigationRoot"
+    class=".listusers.ListUsersView"
     permission="zope2.ManageUsers"
     layer="collective.listusers.interfaces.IListUsersLayer"
     />

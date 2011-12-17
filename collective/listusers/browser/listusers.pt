@@ -1,0 +1,45 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="collective.listusers">
+<body>
+
+<metal:main fill-slot="main">
+    <metal:main define-macro="main">
+
+        <h1 class="documentFirstHeading" i18n:translate="">
+          List users
+        </h1>
+
+        <h2>Form</h2>
+        <form tal:replace="structure view/form_wrapper" />
+
+        <h2>Results</h2>
+        Title: <span tal:replace="options/title" />
+        <table>
+          <thead>
+            <tr>
+                <th>foo</th>
+                <th>bar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>3</td>
+            </tr>
+          </tbody>
+        </table>
+
+    </metal:main>
+</metal:main>
+
+</body>
+</html>
