@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 """Tests for the listusers form and view."""
 
-from collective.listusers.browser.listusers import ListUsersView
 from collective.listusers.interfaces import IListUsersLayer
 from collective.listusers.tests.base import IntegrationTestCase
 from zope.component import getMultiAdapter
 from zope.interface import directlyProvides
-from zope.app.component.hooks import setSite
-from zope.publisher.browser import TestRequest
 
-import mock
 import unittest2 as unittest
 
 
@@ -37,7 +33,6 @@ class TestListUsersView(IntegrationTestCase):
         self.request.form.update({'user_attributes': ['fullname', 'email'],
                                   'groups': ['Administrators']})
         self.assertEquals(listusers_view.get_users(), [''])
-
 
 
 def test_suite():
