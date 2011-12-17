@@ -26,20 +26,40 @@ Start by logging-in so we can access @@listusers.
 List some users
 ---------------
 
-    Go to List Users form.
+    Go to List Users view.
     >>> browser.open(portal.absolute_url() + '/@@listusers')
 
-    Select a Group to list users from.
-    >>> import pdb;pdb.set_trace()
-    >>> menu = browser.getControl('Add portlet', index=0).control
-    >>> menu.value = ['/++contextportlets++plone.leftcolumn/+/portlets.Recent']
+    TODO: continue here when you have changed multiselect widget into a normal
+    selection widget
+    Select a `Group` to list users from.
+
+    Select `User Attributes` to display in the results.
+
+    Click `List users`.
+
+    Do we see our users?
+
 
 Clear search criteria
 ---------------------
 
-    TODO
+    Click `Clear`.
+
+    Nothing should be selected in the `Groups` field.
+
+    Nothing should be selected in the `Users attributes` field.
+
+    There should be no results.
+
 
 Test validation
 ---------------
 
-    TODO
+    Since nothing is currently selected, we should get validation errors when
+    trying to list users.
+
+    Click `List Users`.
+
+    Check that there are no results.
+
+
