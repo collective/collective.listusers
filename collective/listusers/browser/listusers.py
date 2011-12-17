@@ -37,10 +37,10 @@ class ListUsersForm(form.Form):
 
     @button.buttonAndHandler(_(u"Reset"))
     def reset_form(self, action):
-
-        # TODO: clear both form fields
-        self.status = _(u"reset")
-        return 'reset'
+        """TODO: docstring"""
+        url = self.context.portal_url() + "/@@listusers"
+        self.request.response.redirect(url)
+        return
 
 
 class ListUsersFormWrapper(FormWrapper):
@@ -55,7 +55,7 @@ class ListUsersView(BrowserView):
 
     def __call__(self):
 
-        # Hide the editable border and tabs -> TODO: this doesnt' w
+        # Hide the editable border and tabs
         self.request.set('disable_border', True)
 
         self.attributes = self.get_attributes()
