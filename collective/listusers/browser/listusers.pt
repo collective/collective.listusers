@@ -18,7 +18,6 @@
         <form tal:replace="structure view/form_wrapper" />
 
         <h2>Results</h2>
-        Title: <span tal:replace="options/title" />
         <table>
           <thead>
             <tr>

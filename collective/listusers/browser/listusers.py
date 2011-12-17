@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Module that displays the List Users form."""
 
+from plone.z3cform.layout import FormWrapper
 from collective.listusers import ListUsersMessageFactory as _
 from collective.listusers.interfaces import IListUsersForm
 from z3c.form import button
@@ -22,11 +23,6 @@ class ListUsersForm(form.Form):
     # usable for edit forms, where you have an actual context
     ignoreContext = True
 
-    # Hide the editable border and tabs
-    def update(self):
-        self.request.set('disable_border', True)
-        return super(ListUsersForm, self).update()
-
     @button.buttonAndHandler(_(u"List users"))
     def list_users(self, action):
         """TODO: docstring"""
@@ -46,15 +42,10 @@ class ListUsersForm(form.Form):
         return 'reset'
 
 
-from plone.z3cform.layout import FormWrapper
-
-
-class PortletFormView(FormWrapper):
-    """ Form view which renders z3c.forms embedded in a portlet.
-
-    Subclass FormWrapper so that we can use custom frame template. """
-
+class ListUsersFormWrapper(FormWrapper):
+    """Subclass FormWrapper so that we can use a custom frame template."""
     index = ViewPageTemplateFile("formwrapper.pt")
+    form = ListUsersForm
 
 
 class ListUsersView(BrowserView):
@@ -62,30 +53,12 @@ class ListUsersView(BrowserView):
     index = ViewPageTemplateFile('listusers.pt')
 
     def __call__(self):
+
+        # Hide the editable border and tabs -> TODO: this doesnt' w
+        self.request.set('disable_border', True)
+
         options = {
             'title': self.request.get('form.widgets.title', None),
         }
-        self.form_wrapper = self.getForm()
+        self.form_wrapper = ListUsersFormWrapper(self.context, self.request)
         return self.index(**options)
-
-    def getForm(self):
-        """ Create a form instance.
-
-        @return: z3c.form wrapped for Plone 4 view
-        """
-
-        context = self.context.aq_inner
-
-        # returnURL = self.context.absolute_url()
-
-        # Create a compact version of the contact form
-        # (not all fields visible)
-        #form = ListUsersForm(context, self.request, returnURLHint=returnURL, full=False)
-        form = ListUsersForm(context, self.request)
-
-        # Wrap a form in Plone view
-        view = PortletFormView(context, self.request)
-        view = view.__of__(context)  # Make sure acquisition chain is respected
-        view.form_instance = form
-
-        return view
