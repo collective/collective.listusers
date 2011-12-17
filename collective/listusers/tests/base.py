@@ -9,6 +9,7 @@ from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.testing import z2
+from Products.CMFCore.utils import getToolByName
 
 import unittest2 as unittest
 
@@ -48,6 +49,19 @@ class IntegrationTestCase(unittest.TestCase):
     """Base class for integration tests."""
 
     layer = INTEGRATION_TESTING
+
+    def createUser(self, user_id, roles=['Member'], groups=[]):
+        """Helper method which creates a user with the provided user_id and
+        roles and adds him to the provided groups.
+        """
+        portal = self.layer['portal']
+        acl_users = getToolByName(portal, 'acl_users')
+        gtool = getToolByName(portal, 'portal_groups')
+
+        acl_users.userFolderAddUser(user_id, 'password', roles, [])
+
+        for group_id in groups:
+            gtool.addPrincipalToGroup(user_id, group_id)
 
 
 class FunctionalTestCase(unittest.TestCase):
