@@ -33,13 +33,14 @@ setup(name='collective.listusers',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          'setuptools',
-          'plone.app.z3cform',
           'collective.js.datatables',
           'plone.app.z3cform',
+          'plone.app.z3cform',
+          'setuptools',
       ],
       extras_require={
           'test': [
+              'manuel',
               'mock',
               'plone.app.testing',
            ],

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Setup/installation tests for this package."""
 
-from Products.CMFCore.utils import getToolByName
 from collective.listusers.tests.base import IntegrationTestCase
+from Products.CMFCore.utils import getToolByName
 
 import unittest2 as unittest
 
@@ -20,6 +20,10 @@ class TestSetup(IntegrationTestCase):
         portal_quickinstaller.
         """
         self.failUnless(self.installer.isProductInstalled('collective.listusers'))
+
+    def test_dependencies_installed(self):
+        """Test that all dependencies are installed."""
+        self.failUnless(self.installer.isProductInstalled('collective.js.datatables'))
 
     def test_uninstall(self):
         """Test if collective.listusers is cleanly uninstalled."""

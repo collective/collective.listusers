@@ -1,11 +1,14 @@
+# -*- coding: utf-8 -*-
+"""Definitions of vocabularies."""
+
 from collective.listusers.config import MEMBER_PROPERTIES_TO_EXCLUDE
 from plone.app.users.userdataschema import IUserDataSchemaProvider
 from zope.component import getUtility
 from zope.interface import implements
 from zope.schema import getFieldNames
+from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
-from zope.schema.interfaces import IVocabularyFactory
 
 
 class UserAttributesVocabulary(object):

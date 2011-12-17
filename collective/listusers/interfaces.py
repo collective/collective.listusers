@@ -20,10 +20,10 @@ def must_select_one_constraint(value):
 
 
 class IListUsersForm(Interface):
-    """TODO: add docstring"""
+    """Field definition for List Users form."""
 
     groups = List(
-        title=u'Groups',
+        title=_(u'Groups'),
         constraint=must_select_one_constraint,
         value_type=Choice(
             vocabulary='plone.app.vocabularies.Groups',
@@ -31,7 +31,7 @@ class IListUsersForm(Interface):
     )
 
     user_attributes = List(
-        title=u'User attributes',
+        title=_(u'User attributes'),
         constraint=must_select_one_constraint,
         value_type=Choice(
             vocabulary='collective.listusers.vocabularies.UserAttributes',

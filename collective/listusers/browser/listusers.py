@@ -21,8 +21,7 @@ class ListUsersForm(form.Form):
 
     fields = field.Fields(IListUsersForm)
 
-    label = _(u"TODO label")
-    description = _(u"TODO description")
+    label = _(u"List users")
 
     # don't try to read Plone root for form fields data, this is only mostly
     # usable for edit forms, where you have an actual context
@@ -30,7 +29,7 @@ class ListUsersForm(form.Form):
 
     @button.buttonAndHandler(_(u"List users"))
     def list_users(self, action):
-        """TODO: docstring"""
+        """Submit button handler."""
         data, errors = self.extractData()
         if errors:
             self.status = self.formErrorsMessage
@@ -38,18 +37,19 @@ class ListUsersForm(form.Form):
 
     @button.buttonAndHandler(_(u"Reset"))
     def reset_form(self, action):
-        """TODO: docstring"""
+        """Cancel button handler."""
         url = self.context.portal_url() + "/@@listusers"
         self.request.response.redirect(url)
 
 
 class ListUsersFormWrapper(FormWrapper):
-    """Subclass FormWrapper so that we can use a custom frame template."""
+    """Subclass FormWrapper so that we can use a custom frame template that
+    renders only the form, nothing else."""
     index = ViewPageTemplateFile("formwrapper.pt")
 
 
 class ListUsersView(BrowserView):
-    """A BrowserView to the ListUsersForm along with it's results."""
+    """A BrowserView to display the ListUsersForm along with it's results."""
     index = ViewPageTemplateFile('listusers.pt')
 
     def __init__(self, context, request):
@@ -64,8 +64,10 @@ class ListUsersView(BrowserView):
         # Hide the editable border and tabs
         self.request.set('disable_border', True)
 
+        # Which user attributes to use
         self.attributes = self.get_attributes()
 
+        # Prepare display values for the template
         options = {
             'attributes': self.attributes,
             'users': self.get_users(),
@@ -77,21 +79,19 @@ class ListUsersView(BrowserView):
         as expected."""
         self.form_wrapper.form_instance.update()
 
-    def get_group_ids(self):
-        """TODO: docstring"""
-        return self.request.get('form.widgets.groups')
-
     def get_attributes(self):
-        """TODO: docstring"""
+        """Fetch list of user attributes."""
         return self.request.get('form.widgets.user_attributes')
 
     def get_users(self):
-        """TODO: write docstring"""
+        """Compile a list of users to display."""
 
+        # Just a precaution
         if not self.attributes:
             logger.warning('User has not selected any attributes.')
             return []
 
+        # Just a precaution
         if not self.get_group_ids():
             logger.warning('User has not selected any groups.')
             return []

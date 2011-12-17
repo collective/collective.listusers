@@ -8,17 +8,17 @@
   <five:registerPackage package="." initialize=".initialize" />
   <includeDependencies package="." />
   <i18n:registerTranslations directory="locales" />
-  
+
   <include package="plone.app.z3cform" />
   <include package=".browser" />
 
   <genericsetup:registerProfile
-      name="default"
-      title="collective.listusers"
-      directory="profiles/default"
-      description="Installs the collective.listusers package"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
+    name="default"
+    title="collective.listusers"
+    directory="profiles/default"
+    description="Installs the collective.listusers package"
+    provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
 
   <utility
     component=".vocabularies.UserAttributesVocabularyFactory"
