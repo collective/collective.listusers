@@ -11,6 +11,10 @@ from z3c.form import button
 from z3c.form import field
 from z3c.form import form
 
+import logging
+
+logger = logging.getLogger('collective.listusers')
+
 
 class ListUsersForm(form.Form):
     """The List Users form."""
@@ -73,6 +77,10 @@ class ListUsersView(BrowserView):
         as expected."""
         self.form_wrapper.form_instance.update()
 
+    def get_group_ids(self):
+        """TODO: docstring"""
+        return self.request.get('form.widgets.groups')
+
     def get_attributes(self):
         """TODO: docstring"""
         return self.request.get('form.widgets.user_attributes')
@@ -81,12 +89,26 @@ class ListUsersView(BrowserView):
         """TODO: write docstring"""
 
         if not self.attributes:
+            logger.warning('User has not selected any attributes.')
             return []
 
-        acl = getToolByName(self.context, 'acl_users')
+        if not self.get_group_ids():
+            logger.warning('User has not selected any groups.')
+            return []
+
+        gtool = getToolByName(self.context, 'portal_groups')
+        group_ids = self.get_group_ids()
+        users = set()
+
+        # Get users for all the selected groups
+        for group_id in group_ids:
+            group = gtool.getGroupById(group_id)
+            users.update(group.getGroupMembers())
 
         results = []
-        for user in acl.getUsers():
+
+        # Results should have only the selected properties
+        for user in list(users):
             result = []
             for attr in self.attributes:
                 result.append(user.getProperty(attr))
