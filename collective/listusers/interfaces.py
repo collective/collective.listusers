@@ -1,27 +1,39 @@
 # -*- coding: utf-8 -*-
 """Module where all interfaces and schemas live."""
 
+from collective.listusers import ListUsersMessageFactory as _
 from zope.interface import Interface
-import zope.schema
+from zope.interface import Invalid
+from zope.schema import Choice
+from zope.schema import List
 
 
 class IListUsersLayer(Interface):
     """Marker interface for defining a Zope 3 browser layer."""
 
 
+def must_select_one_constraint(value):
+    """Check that at least item was selected."""
+    if len(value) == 0:
+        raise Invalid(_(u"You need to select at least one value."))
+    return True
+
+
 class IListUsersForm(Interface):
     """TODO: add docstring"""
 
-    groups = zope.schema.List(
+    groups = List(
         title=u'Groups',
-        value_type=zope.schema.Choice(
+        constraint=must_select_one_constraint,
+        value_type=Choice(
             vocabulary='plone.app.vocabularies.Groups',
-            required=False)
+        )
     )
 
-    user_attributes = zope.schema.List(
+    user_attributes = List(
         title=u'User attributes',
-            value_type=zope.schema.Choice(
-                vocabulary='collective.listusers.vocabularies.UserAttributes',
-                required=False)
+        constraint=must_select_one_constraint,
+        value_type=Choice(
+            vocabulary='collective.listusers.vocabularies.UserAttributes',
+        )
     )
