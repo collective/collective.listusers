@@ -20,4 +20,9 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <utility
+    component=".vocabularies.UserAttributesVocabularyFactory"
+    name="collective.listusers.vocabularies.UserAttributes"
+    />
+
 </configure>

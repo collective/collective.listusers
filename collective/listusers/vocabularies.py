@@ -1,15 +1,22 @@
-from plone.app.users.userdataschema import IUserDataSchema
+from plone.app.users.userdataschema import IUserDataSchemaProvider
+from zope.component import getUtility
+from zope.interface import implements
+from zope.schema import getFieldNames
+from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema.interfaces import IVocabularyFactory
 
 
-def get_user_attributes_vocabulary():
-    attributes = IUserDataSchema.names()
-    terms = []
+class UserAttributesVocabulary(object):
+    """Vocabulary factory for user attributes."""
+    implements(IVocabularyFactory)
 
-    for attribute in attributes:
-        terms.append(
-            SimpleVocabulary.createTerm(attribute, attribute, attribute),)
+    def __call__(self, context):
+        schema_provider = getUtility(IUserDataSchemaProvider)
+        schema = schema_provider.getSchema()
+        user_attributes = getFieldNames(schema)
+        items = [SimpleTerm(ua, ua, ua) for ua in user_attributes]
 
-    return SimpleVocabulary(terms)
+        return SimpleVocabulary(items)
 
-user_attributes_vocabulary = get_user_attributes_vocabulary()
+UserAttributesVocabularyFactory = UserAttributesVocabulary()
