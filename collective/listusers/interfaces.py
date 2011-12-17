@@ -24,6 +24,8 @@ class IListUsersForm(Interface):
 
     groups = List(
         title=_(u'Groups'),
+        description=_(u'Select groups from which you want to display users' \
+            'from. You can select more than one group.'),
         constraint=must_select_one_constraint,
         value_type=Choice(
             vocabulary='plone.app.vocabularies.Groups',
@@ -32,6 +34,8 @@ class IListUsersForm(Interface):
 
     user_attributes = List(
         title=_(u'User attributes'),
+        description=_(u'Select which user attributes you want displayed in' \
+            'the results table.'),
         constraint=must_select_one_constraint,
         value_type=Choice(
             vocabulary='collective.listusers.vocabularies.UserAttributes',

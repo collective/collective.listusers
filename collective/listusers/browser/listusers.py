@@ -80,7 +80,7 @@ class ListUsersView(BrowserView):
         self.form_wrapper.form_instance.update()
 
     def get_attributes(self):
-        """Fetch list of user attributes."""
+        """Fetch a list of user attributes."""
         return self.request.get('form.widgets.user_attributes')
 
     def get_users(self):
