@@ -82,6 +82,4 @@ class ListUsersView(BrowserView):
                 result.append(user.getProperty(attr))
             results.append(result)
 
-        for i in range(1, 10):
-            results = results + results
         return results
