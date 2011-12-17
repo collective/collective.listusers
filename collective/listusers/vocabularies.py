@@ -1,3 +1,4 @@
+from collective.listusers.config import MEMBER_PROPERTIES_TO_EXCLUDE
 from plone.app.users.userdataschema import IUserDataSchemaProvider
 from zope.component import getUtility
 from zope.interface import implements
@@ -15,7 +16,9 @@ class UserAttributesVocabulary(object):
         schema_provider = getUtility(IUserDataSchemaProvider)
         schema = schema_provider.getSchema()
         user_attributes = getFieldNames(schema)
-        items = [SimpleTerm(ua, ua, ua) for ua in user_attributes]
+
+        items = [SimpleTerm(attr, attr, attr) for attr in user_attributes
+                 if attr not in MEMBER_PROPERTIES_TO_EXCLUDE]
 
         return SimpleVocabulary(items)
 
