@@ -27,20 +27,16 @@ class ListUsersForm(form.Form):
     @button.buttonAndHandler(_(u"List users"))
     def list_users(self, action):
         """TODO: docstring"""
-
         data, errors = self.extractData()
         if errors:
             self.status = self.formErrorsMessage
             return
-        self.status = _(u"list")
-        return 'list'
 
     @button.buttonAndHandler(_(u"Reset"))
     def reset_form(self, action):
         """TODO: docstring"""
         url = self.context.portal_url() + "/@@listusers"
         self.request.response.redirect(url)
-        return
 
 
 class ListUsersFormWrapper(FormWrapper):
@@ -85,4 +81,7 @@ class ListUsersView(BrowserView):
             for attr in self.attributes:
                 result.append(user.getProperty(attr))
             results.append(result)
+
+        for i in range(1, 10):
+            results = results + results
         return results
