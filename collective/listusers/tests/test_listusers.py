@@ -23,15 +23,21 @@ class TestListUsersView(IntegrationTestCase):
         self.createUser('user4', groups=['Site Administrators'])
 
     def test_view_registration(self):
-        listusers_view = getMultiAdapter((self.portal, self.request),
-                                         name=u'listusers')
+        listusers_view = getMultiAdapter(
+            (self.portal, self.request), name=u'listusers'
+        )
         self.failUnless(listusers_view)
 
     def test_get_users(self):
-        listusers_view = getMultiAdapter((self.portal, self.request),
-                                         name=u'listusers')
-        self.request.form.update({'user_attributes': ['fullname', 'email'],
-                                  'groups': ['Administrators']})
+        listusers_view = getMultiAdapter(
+            (self.portal, self.request), name=u'listusers'
+        )
+        self.request.form.update(
+            {
+             'user_attributes': ['fullname', 'email'],
+             'groups': ['Administrators']
+            }
+        )
         self.assertEquals(listusers_view.get_users(), [''])
 
 
