@@ -17,6 +17,8 @@ class TestListUsersView(IntegrationTestCase):
         self.portal = self.layer['portal']
         self.request = self.layer['request']
         directlyProvides(self.request, IListUsersLayer)
+
+        # create some dummy content
         self.createUser('user1', groups=['Administrators'])
         self.createUser('user2', groups=['Reviewers'])
         self.createUser('user3', groups=['Administrators', 'Reviewers'])
