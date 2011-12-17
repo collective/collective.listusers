@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """Module where all interfaces and schemas live."""
 
+from collective.listusers.vocabularies import user_attributes_vocabulary
 from zope.interface import Interface
+import zope.schema
 
 
 class IListUsersLayer(Interface):
@@ -11,4 +13,14 @@ class IListUsersLayer(Interface):
 class IListUsersForm(Interface):
     """TODO: add docstring"""
 
-    # TODO: add groups and attributes fields
+    groups = zope.schema.List(
+                title=u'Groups',
+                value_type=zope.schema.Choice(
+                    vocabulary='plone.app.vocabularies.Groups',
+                    required=False))
+
+    user_attributes = zope.schema.List(
+                title=u'User attributes',
+                    value_type=zope.schema.Choice(
+                        vocabulary=user_attributes_vocabulary,
+                        required=False))

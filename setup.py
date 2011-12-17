@@ -36,6 +36,7 @@ setup(name='collective.listusers',
           'setuptools',
           'plone.app.z3cform',
           'collective.js.datatables',
+          'plone.app.z3cform',
       ],
       extras_require={
           'test': [
