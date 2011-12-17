@@ -26,9 +26,9 @@
         <div id="listusers-form">
             <form tal:replace="structure view/form_wrapper" />
         </div>
-        
+
         <div class="visualClear"></div>
-        
+
         <h2>Results</h2>
         <!-- The id here here must be 'example' because we use dataTable's
         demo CSS -->
