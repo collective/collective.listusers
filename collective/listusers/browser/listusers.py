@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """Module that displays the List Users form."""
 
-from plone.z3cform.layout import FormWrapper
 from collective.listusers import ListUsersMessageFactory as _
 from collective.listusers.interfaces import IListUsersForm
+from plone.z3cform.layout import FormWrapper
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form import field
 from z3c.form import form
-from Products.Five.browser import BrowserView
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 
 class ListUsersForm(form.Form):
@@ -57,8 +58,31 @@ class ListUsersView(BrowserView):
         # Hide the editable border and tabs -> TODO: this doesnt' w
         self.request.set('disable_border', True)
 
+        self.attributes = self.get_attributes()
+
         options = {
-            'title': self.request.get('form.widgets.title', None),
+            'attributes': self.attributes,
+            'users': self.get_users(),
         }
         self.form_wrapper = ListUsersFormWrapper(self.context, self.request)
         return self.index(**options)
+
+    def get_attributes(self):
+        """TODO: docstring"""
+        return self.request.get('form.widgets.user_attributes')
+
+    def get_users(self):
+        """TODO: write docstring"""
+
+        if not self.attributes:
+            return []
+
+        acl = getToolByName(self.context, 'acl_users')
+
+        results = []
+        for user in acl.getUsers():
+            result = []
+            for attr in self.attributes:
+                result.append(user.getProperty(attr))
+            results.append(result)
+        return results
