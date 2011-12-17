@@ -50,10 +50,13 @@ class IntegrationTestCase(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
-    def createUser(self, user_id, roles=['Member'], groups=[]):
+    def createUser(self, user_id, roles=None, groups=None):
         """Helper method which creates a user with the provided user_id and
         roles and adds him to the provided groups.
         """
+        roles = roles or ['Member']
+        groups = groups or []
+
         portal = self.layer['portal']
         acl_users = getToolByName(portal, 'acl_users')
         gtool = getToolByName(portal, 'portal_groups')
