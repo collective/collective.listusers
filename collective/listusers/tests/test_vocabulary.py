@@ -17,9 +17,10 @@ class TestVocabularyIntegration(IntegrationTestCase):
         """Custom shared utility setup for tests."""
         self.portal = self.layer['portal']
 
-    def test_vocabulary_default_values(self):
-        """Integration test to check if the vocabulary correctly returns the
-        default user schema."""
+    def test_user_attributes_vocabulary_default_values(self):
+        """Integration test to check if the user attributes vocabulary
+        correctly returns the default user schema with some of the properties
+        excluded (excludes are defined in config.py)."""
         vocabularyFactory = getUtility(
             IVocabularyFactory,
             name=u"collective.listusers.vocabularies.UserAttributes"
@@ -27,11 +28,12 @@ class TestVocabularyIntegration(IntegrationTestCase):
         vocabulary = vocabularyFactory(self.portal)
         terms = list(vocabulary)
         expected_attributes = ['fullname', 'email', 'home_page', 'description',
-                                'location', 'portrait', 'pdelete']
+                                'location']
         actual_attributes = [term.title for term in terms]
+        expected_attributes.sort()
+        actual_attributes.sort()
 
-        self.assertEquals(expected_attributes.sort(),
-                          actual_attributes.sort())
+        self.assertEquals(expected_attributes, actual_attributes)
 
 
 def test_suite():
