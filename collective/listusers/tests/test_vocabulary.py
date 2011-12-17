@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Unit and integration tests for StylesVocabulary."""
+"""Unit and integration tests for collective.listusers vocabularies."""
 
 from collective.listusers.tests.base import IntegrationTestCase
 from zope.component import getUtility
@@ -8,16 +8,14 @@ from zope.schema.interfaces import IVocabularyFactory
 import unittest2 as unittest
 
 
-class TestVocabularyIntegration(IntegrationTestCase):
-    """Integration tests for StylesVocabulary vocabulary that reads values
-    from control panel configlet.
-    """
+class TestUserAttributesVocabularyIntegration(IntegrationTestCase):
+    """Integration tests for the UserAttributes vocabulary."""
 
     def setUp(self):
         """Custom shared utility setup for tests."""
         self.portal = self.layer['portal']
 
-    def test_user_attributes_vocabulary_default_values(self):
+    def test_vocabulary_default_values(self):
         """Integration test to check if the user attributes vocabulary
         correctly returns the default user schema with some of the properties
         excluded (excludes are defined in config.py)."""
