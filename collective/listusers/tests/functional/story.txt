@@ -29,7 +29,10 @@ List some users
     Go to List Users form.
     >>> browser.open(portal.absolute_url() + '/@@listusers')
 
-    TODO
+    Select a Group to list users from.
+    >>> import pdb;pdb.set_trace()
+    >>> menu = browser.getControl('Add portlet', index=0).control
+    >>> menu.value = ['/++contextportlets++plone.leftcolumn/+/portlets.Recent']
 
 Clear search criteria
 ---------------------

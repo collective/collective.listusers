@@ -64,12 +64,9 @@ class ListUsersView(BrowserView):
         # Hide the editable border and tabs
         self.request.set('disable_border', True)
 
-        # Which user attributes to use
-        self.attributes = self.get_attributes()
-
         # Prepare display values for the template
         options = {
-            'attributes': self.attributes,
+            'attributes': self.request.get('form.widgets.user_attributes'),
             'users': self.get_users(),
         }
         return self.index(**options)
@@ -79,25 +76,21 @@ class ListUsersView(BrowserView):
         as expected."""
         self.form_wrapper.form_instance.update()
 
-    def get_attributes(self):
-        """Fetch a list of user attributes."""
-        return self.request.get('form.widgets.user_attributes')
-
     def get_users(self):
         """Compile a list of users to display."""
 
         # Just a precaution
-        if not self.attributes:
-            logger.warning('User has not selected any attributes.')
+        if not self.request.get('form.widgets.user_attributes'):
+            logger.warning('User has not selected any user attributes.')
             return []
 
         # Just a precaution
-        if not self.get_group_ids():
+        if not self.request.get('form.widgets.groups'):
             logger.warning('User has not selected any groups.')
             return []
 
         gtool = getToolByName(self.context, 'portal_groups')
-        group_ids = self.get_group_ids()
+        group_ids = self.request.get('form.widgets.groups')
         users = set()
 
         # Get users for all the selected groups
@@ -110,7 +103,7 @@ class ListUsersView(BrowserView):
         # Results should have only the selected properties
         for user in list(users):
             result = []
-            for attr in self.attributes:
+            for attr in self.request.get('form.widgets.user_attributes'):
                 result.append(user.getProperty(attr))
             results.append(result)
 
