@@ -10,8 +10,6 @@
 
 <metal:css fill-slot="style_slot">
     <link href="#" media="screen" type="text/css" rel="stylesheet"
-      tal:attributes="href string:$portal_url/++resource++jquery.datatables/media/css/demo_page.css">
-    <link href="#" media="screen" type="text/css" rel="stylesheet"
       tal:attributes="href string:$portal_url/++resource++jquery.datatables/media/css/demo_table.css">
 
 </metal:css>
@@ -32,9 +30,8 @@
         <div class="visualClear"></div>
         
         <h2>Results</h2>
-  <div id="container">
-    <div id="demo">
-
+        <!-- The id here here must be 'example' because we use dataTable's
+        demo CSS -->
         <table id="example" class="display">
           <thead>
             <tr>
@@ -47,7 +44,6 @@
             </tr>
           </tbody>
         </table>
-</div></div>
     </metal:main>
 </metal:main>
 
