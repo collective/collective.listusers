@@ -10,11 +10,13 @@
     directory="resources"
     />
 
-<!--   <browser:page
+  <!-- Register list users form -->
+  <browser:page
     name="listusers"
     for="plone.app.layout.navigation.interfaces.INavigationRoot"
-    class=".list.ListUsersForm"
-    permission="cmf.ManageUsers"
+    class=".listusers.ListUsersForm"
+    permission="zope2.ManageUsers"
+    layer="collective.listusers.interfaces.IListUsersLayer"
     />
- -->
+
 </configure>
