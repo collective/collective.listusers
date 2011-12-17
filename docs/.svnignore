@@ -1,4 +1,0 @@
-# Set with:
-#   svn propset svn:ignore -F .svnignore .
-make.bat
-Makefile
