@@ -25,8 +25,12 @@
         </h1>
 
         <h2>Form</h2>
-        <form tal:replace="structure view/form_wrapper" />
-
+        <div id="listusers-form">
+            <form tal:replace="structure view/form_wrapper" />
+        </div>
+        
+        <div class="visualClear"></div>
+        
         <h2>Results</h2>
   <div id="container">
     <div id="demo">

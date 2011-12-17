@@ -1,0 +1,14 @@
+#listusers-form{
+    width:100%;
+}
+#listusers-form .field,
+#listusers-form .formControls{
+    float: left;
+    clear: none;
+    margin-right: 2em;
+}
+#listusers-form .formControls input{
+    display: block;
+    margin-top: 0.4em;
+    min-width: 100px;
+}
