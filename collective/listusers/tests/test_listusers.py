@@ -20,10 +20,50 @@ class TestListUsersView(IntegrationTestCase):
         directlyProvides(self.request, IListUsersLayer)
 
         # create some dummy content
-        self.createUser('user1', groups=['Administrators'])
-        self.createUser('user2', groups=['Reviewers'])
-        self.createUser('user3', groups=['Administrators', 'Reviewers'])
-        self.createUser('user4', groups=['Site Administrators'])
+        user1_props = {
+            'fullname':'User 1',
+            'description': 'User 1 description',
+            'email': 'user1@user1.com',
+            'location': 'Jupiter',
+        }
+        user2_props = {
+            'fullname':'User 2',
+            'description': 'User 2 description',
+            'email': 'user2@user2.com',
+            'location': 'Moon',
+        }
+        user3_props = {
+            'fullname':'User 3',
+            'description': 'User 3 description',
+            'email': 'user3@user3.com',
+            'location': 'Saturn',
+        }
+        user4_props = {
+            'fullname':'User 4',
+            'description': 'User 4 description',
+            'email': 'user4@user4.com',
+            'location': 'Pluto',
+        }
+        self.createUser(
+            'user1',
+            properties=user1_props,
+            groups=['Administrators']
+        )
+        self.createUser(
+            'user2',
+            properties=user2_props,
+            groups=['Reviewers']
+        )
+        self.createUser(
+            'user3',
+            properties=user3_props,
+            groups=['Administrators', 'Reviewers']
+        )
+        self.createUser(
+            'user4',
+            properties=user4_props,
+            groups=['Site Administrators']
+        )
 
     def test_view_registration(self):
         listusers_view = getMultiAdapter(
@@ -65,11 +105,17 @@ class TestListUsersView(IntegrationTestCase):
             (self.portal, self.request), name=u'listusers'
         )
         self.request.form.update({
-             'user_attributes': ['fullname', 'email'],
-             'groups': ['Administrators']
+             'form.widgets.user_attributes': ['fullname', 'email'],
+             'form.widgets.groups': ['Administrators']
             }
         )
-        self.assertEquals(listusers_view.get_users(), [])
+        results = {
+            'user1': ['User 1', 'user1@user1.com'],
+            'user3': ['User 3', 'user3@user3.com']
+        }
+        # Doesn't work, because the properties aren't properly set
+        # check createUser method in base.py
+        self.assertEquals(listusers_view.get_users(), results)
 
 
 def test_suite():

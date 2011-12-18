@@ -50,18 +50,23 @@ class IntegrationTestCase(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
-    def createUser(self, user_id, roles=None, groups=None):
+    def createUser(self, user_id, properties=None, roles=None, groups=None):
         """Helper method which creates a user with the provided user_id and
         roles and adds him to the provided groups.
         """
         roles = roles or ['Member']
         groups = groups or []
+        properties = properties or {}
 
         portal = self.layer['portal']
         acl_users = getToolByName(portal, 'acl_users')
         gtool = getToolByName(portal, 'portal_groups')
 
         acl_users.userFolderAddUser(user_id, 'password', roles, [])
+        user = acl_users.getUserById(user_id)
+
+        # XXX: Properties aren't properly set, don't know why.
+        user.setProperties(properties=properties)
 
         for group_id in groups:
             gtool.addPrincipalToGroup(user_id, group_id)
