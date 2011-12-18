@@ -1,3 +1,5 @@
+"""VCard view."""
+
 from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
 
@@ -16,8 +18,14 @@ END:VCARD
 
 
 class VCardView(BrowserView):
-    """View for outputting the vard."""
+    """View for generating user information in the vcard format."""
+
     def __call__(self, user_id=None):
+        """Main view method that returns vcard info for a given user.
+        
+        :returns: vcard info for a given user
+        :rtype: vcard format
+        """
         if not user_id:
             return
 
