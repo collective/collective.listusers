@@ -41,8 +41,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr tal:repeat="user options/users">
-          <td tal:repeat="value user" tal:content="value">John Smith</td>
+        <tr tal:define="users python: options['users'].items()" 
+            tal:repeat="user users">
+          <td tal:repeat="value python: user[1]" tal:content="value">John Smith</td>
+          <td><a tal:define="user_id python: user[0]" 
+                tal:attributes="href string:@@vcard?user_id=$user_id"
+                tal:content="string:${user_id}.vcf">VCard</a>
+          </td>
         </tr>
       </tbody>
     </table>

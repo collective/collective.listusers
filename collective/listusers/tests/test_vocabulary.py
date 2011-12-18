@@ -33,6 +33,7 @@ class TestUserAttributesVocabularyIntegration(IntegrationTestCase):
             'description',
             'location',
             'groups',
+            'vcard',
         ]
         actual_attributes = [term.title for term in terms]
         expected_attributes.sort()

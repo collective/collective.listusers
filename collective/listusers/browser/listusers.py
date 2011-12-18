@@ -91,7 +91,7 @@ class ListUsersView(BrowserView):
             return []
 
         gtool = getToolByName(self.context, 'portal_groups')
-        results = []
+        results = {}
 
         for user in self._get_users_for_selected_groups():
             result = []
@@ -100,10 +100,14 @@ class ListUsersView(BrowserView):
                     result.append(user.getId())
                 elif attr == 'groups':
                     result.append(", ".join(gtool.getGroupsForPrincipal(user)))
+                elif attr == 'vcard':
+                    # Do nothing, we will render the vcard link manually in the
+                    # template.
+                    pass
                 else:
                     result.append(user.getProperty(attr))
 
-            results.append(result)
+            results[user.getId()] = result
 
         return results
 

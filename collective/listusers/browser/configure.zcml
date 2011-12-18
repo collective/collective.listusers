@@ -28,4 +28,12 @@
     layer="collective.listusers.interfaces.IListUsersLayer"
     />
 
+  <!-- Register VCard view -->
+  <browser:page
+    name="vcard"
+    for="*"
+    class=".vcard.VCardView"
+    permission="zope2.ManageUsers"
+    layer="collective.listusers.interfaces.IListUsersLayer"
+    />
 </configure>

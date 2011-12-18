@@ -23,6 +23,7 @@ class UserAttributesVocabulary(object):
         # Add some additional attributes
         user_attributes.insert(0, 'username')
         user_attributes.append('groups')
+        user_attributes.append('vcard')
 
         items = [SimpleTerm(attr, attr, attr) for attr in user_attributes
                  if attr not in MEMBER_PROPERTIES_TO_EXCLUDE]
