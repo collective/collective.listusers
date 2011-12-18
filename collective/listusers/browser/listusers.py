@@ -112,7 +112,7 @@ class ListUsersView(BrowserView):
                     # template.
                     pass
                 else:
-                    result.append(user.getProperty(attr))
+                    result.append(user.getProperty(attr, ''))
 
             results[user.getId()] = result
 
@@ -131,6 +131,8 @@ class ListUsersView(BrowserView):
         users = set()
         for group_id in groups:
             group = gtool.getGroupById(group_id)
-            users.update(group.getGroupMembers())
+
+            if group:
+                users.update(group.getGroupMembers())
 
         return list(users)

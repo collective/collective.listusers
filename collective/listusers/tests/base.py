@@ -61,12 +61,14 @@ class IntegrationTestCase(unittest.TestCase):
         portal = self.layer['portal']
         acl_users = getToolByName(portal, 'acl_users')
         gtool = getToolByName(portal, 'portal_groups')
+        memberdata = getToolByName(self.portal, 'portal_memberdata')
 
         acl_users.userFolderAddUser(user_id, 'password', roles, [])
         user = acl_users.getUserById(user_id)
 
-        # XXX: Properties aren't properly set, don't know why.
-        user.setProperties(properties=properties)
+        # Set user properties
+        memberdata.wrapUser(user).setMemberProperties(properties)
+        #user.setProperties(properties=properties)
 
         for group_id in groups:
             gtool.addPrincipalToGroup(user_id, group_id)
