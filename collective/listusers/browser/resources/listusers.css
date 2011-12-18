@@ -1,14 +1,28 @@
 #listusers-form {
     width:100%;
 }
-#listusers-form .field,
-#listusers-form .formControls {
-    float: left;
-    clear: none;
-    margin-right: 2em;
+#listusers-form select {
+    min-width: 160px;
+}
+#listusers-form select option {
+    margin-bottom: 3px;
+    padding: 0px 5px;
 }
 #listusers-form .formControls input {
-    display: block;
-    margin-top: 0.4em;
     min-width: 100px;
+}
+
+#listusers-form .formControls {
+    margin-bottom: 50px;
+}
+
+#listusers-form .formControls #form-buttons-reset {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+#listusers-form .fieldErrorBox {
+    color: red;
+    margin: 10px 15px 15px 10px;
 }
