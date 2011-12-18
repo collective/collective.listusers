@@ -5,7 +5,7 @@ from collective.listusers import ListUsersMessageFactory as _
 from zope.interface import Interface
 from zope.interface import Invalid
 from zope.schema import Choice
-from zope.schema import List
+from zope.schema import List, FrozenSet
 
 
 class IListUsersLayer(Interface):
@@ -22,7 +22,7 @@ def must_select_one_constraint(value):
 class IListUsersForm(Interface):
     """Field definition for List Users form."""
 
-    groups = List(
+    groups = FrozenSet(
         title=_(u'Groups'),
         description=_(u'Select groups from which you want to display users ' \
             'from.'),
