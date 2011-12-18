@@ -8,13 +8,14 @@
 <body>
 
 <metal:css fill-slot="style_slot">
-  <link href="#" media="screen" type="text/css" rel="stylesheet"
-    tal:attributes="href string:$portal_url/++resource++jquery.datatables/media/css/demo_table.css">
-  <link href="#" media="screen" type="text/css" rel="stylesheet"
-    tal:attributes="href string:$portal_url/++resource++collective.listusers/listusers.css">
+  <link tal:attributes="href string:$portal_url/++resource++jquery.datatables/media/css/demo_table.css" media="screen" type="text/css" rel="stylesheet">
+  <link tal:attributes="href string:$portal_url/++resource++jquery.datatables/extras/TableTools/media/css/TableTools.css" media="screen" type="text/css" rel="stylesheet">
+  <link tal:attributes="href string:$portal_url/++resource++collective.listusers/listusers.css" media="screen" type="text/css" rel="stylesheet">
 </metal:css>
 
 <metal:js fill-slot="javascript_head_slot">
+  <script tal:attributes="src string:$portal_url/++resource++jquery.datatables/extras/TableTools/media/js/ZeroClipboard.js" type="text/javascript"></script>
+  <script tal:attributes="src string:$portal_url/++resource++jquery.datatables/extras/TableTools/media/js/TableTools.js" type="text/javascript"></script>
   <script tal:attributes="src string:$portal_url/++resource++collective.listusers/listusers.js" type="text/javascript"></script>
 </metal:js>
 
