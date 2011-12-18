@@ -3,6 +3,7 @@
 
 from collective.listusers.interfaces import IListUsersLayer
 from collective.listusers.tests.base import IntegrationTestCase
+from Products.CMFCore.utils import getToolByName
 from zope.component import getMultiAdapter
 from zope.interface import directlyProvides
 
@@ -29,6 +30,35 @@ class TestListUsersView(IntegrationTestCase):
             (self.portal, self.request), name=u'listusers'
         )
         self.failUnless(listusers_view)
+
+    def test_get_groups_members(self):
+        acl_users = getToolByName(self.portal, 'acl_users')
+        memberdata = getToolByName(self.portal, 'portal_memberdata')
+        listusers_view = getMultiAdapter(
+            (self.portal, self.request), name=u'listusers'
+        )
+
+        # Test empty groups
+        groups = []
+        self.assertEquals(listusers_view.get_groups_members(groups), [])
+
+        # Test single group
+        groups = ['Site Administrators']
+        expected_results = [
+            memberdata.wrapUser(acl_users.getUserById('user4')),
+        ]
+        actual_results = listusers_view.get_groups_members(groups)
+        self.assertEquals(actual_results, expected_results)
+
+        # Test multiple groups
+        groups = ['Administrators', 'Reviewers']
+        expected_results = [
+            memberdata.wrapUser(acl_users.getUserById('user1')),
+            memberdata.wrapUser(acl_users.getUserById('user2')),
+            memberdata.wrapUser(acl_users.getUserById('user3'))
+        ]
+        actual_results = listusers_view.get_groups_members(groups)
+        self.assertEquals(actual_results, expected_results)
 
     def test_get_users(self):
         listusers_view = getMultiAdapter(
