@@ -34,19 +34,20 @@
     <div class="visualClear"></div>
 
     <!-- The id here here must be 'example' because we use dataTable's demo CSS -->
-    <table id="example" class="display">
+    <table id="example" class="display" tal:condition="options/users">
       <thead>
         <tr>
           <th tal:repeat="attr options/attributes" tal:content="attr">fullname</th>
         </tr>
       </thead>
       <tbody>
-        <tr tal:define="users python: options['users'].items()" 
+        <tr tal:define="users python: options['users'].items()"
             tal:repeat="user users">
           <td tal:repeat="value python: user[1]" tal:content="value">John Smith</td>
-          <td><a tal:define="user_id python: user[0]" 
-                tal:attributes="href string:@@vcard?user_id=$user_id"
-                tal:content="string:${user_id}.vcf">VCard</a>
+          <td tal:condition="python: 'vcard' in options['attributes']">
+            <a tal:define="user_id python: user[0]"
+                 tal:attributes="href string:@@vcard?user_id=$user_id"
+                 tal:content="string:${user_id}.vcf">VCard</a>
           </td>
         </tr>
       </tbody>

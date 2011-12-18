@@ -91,14 +91,12 @@ class ListUsersView(BrowserView):
         # Just a precaution
         attrs = self.request.get('form.widgets.user_attributes')
         if not attrs:
-            logger.warning('User has not selected any user attributes.')
-            return {}
+            return None
 
         # Just a precaution
         groups = self.request.get('form.widgets.groups')
         if not groups:
-            logger.warning('User has not selected any groups.')
-            return {}
+            return None
 
         gtool = getToolByName(self.context, 'portal_groups')
         results = {}
