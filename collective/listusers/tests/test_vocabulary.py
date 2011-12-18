@@ -26,7 +26,13 @@ class TestUserAttributesVocabularyIntegration(IntegrationTestCase):
         vocabulary = vocabularyFactory(self.portal)
         terms = list(vocabulary)
         expected_attributes = [
-            'fullname', 'email', 'home_page', 'description', 'location'
+            'username',
+            'fullname',
+            'email',
+            'home_page',
+            'description',
+            'location',
+            'groups',
         ]
         actual_attributes = [term.title for term in terms]
         expected_attributes.sort()

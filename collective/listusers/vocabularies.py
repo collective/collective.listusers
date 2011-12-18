@@ -20,6 +20,10 @@ class UserAttributesVocabulary(object):
         schema = schema_provider.getSchema()
         user_attributes = getFieldNames(schema)
 
+        # Add some additional attributes
+        user_attributes.insert(0, 'username')
+        user_attributes.append('groups')
+
         items = [SimpleTerm(attr, attr, attr) for attr in user_attributes
                  if attr not in MEMBER_PROPERTIES_TO_EXCLUDE]
 

@@ -40,7 +40,7 @@ class TestListUsersView(IntegrationTestCase):
              'groups': ['Administrators']
             }
         )
-        self.assertEquals(listusers_view.get_users(), [''])
+        self.assertEquals(listusers_view.get_users(), [])
 
 
 def test_suite():
