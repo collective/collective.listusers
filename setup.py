@@ -35,7 +35,6 @@ setup(name='collective.listusers',
       install_requires=[
           'collective.js.datatables',
           'plone.app.z3cform',
-          'plone.app.z3cform',
           'setuptools',
       ],
       extras_require={
