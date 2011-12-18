@@ -1,8 +1,7 @@
 from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
 
-VCARD_TEMPLATE = """
-BEGIN:VCARD
+VCARD_TEMPLATE = """BEGIN:VCARD
 FN:%s
 N:%s
 ORG:%s
