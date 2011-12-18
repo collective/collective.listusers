@@ -37,20 +37,6 @@ class TestSetup(IntegrationTestCase):
         from plone.browserlayer import utils
         self.failUnless(IListUsersLayer in utils.registered_layers())
 
-    # cssregistry.xml
-    def test_css_registered(self):
-        """Test if listusers.css file is registered with portal_css."""
-        resources = self.portal.portal_css.getResources()
-        ids = [r.getId() for r in resources]
-        self.failUnless('++resource++collective.listusers/listusers.css' in ids, 'listusers.css not found in portal_css')
-
-    # jsregistry.xml
-    def test_js_registered(self):
-        """Test if listusers.js file is registered with portal_javascript."""
-        resources = self.portal.portal_javascripts.getResources()
-        ids = [r.getId() for r in resources]
-        self.failUnless('++resource++collective.listusers/listusers.js' in ids, 'listusers.js not found in portal_javascript')
-
 
 def test_suite():
     """This sets up a test suite that actually runs the tests in the class
