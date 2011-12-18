@@ -5,5 +5,5 @@ Changelog
 ----------------
 
 - Initial release.
-  [zupo]
+  [zupo, jcerjak]
 

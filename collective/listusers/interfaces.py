@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Module where all interfaces and schemas live."""
+"""Interfaces and schemas."""
 
 from collective.listusers import ListUsersMessageFactory as _
 from zope.interface import Interface

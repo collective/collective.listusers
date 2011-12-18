@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Module that displays the List Users form."""
+"""The List Users view."""
 
 from collective.listusers import ListUsersMessageFactory as _
 from collective.listusers.interfaces import IListUsersForm
@@ -17,7 +17,7 @@ logger = logging.getLogger('collective.listusers')
 
 
 class ListUsersForm(form.Form):
-    """The List Users form."""
+    """The List Users search form based on z3c.form."""
 
     fields = field.Fields(IListUsersForm)
 
@@ -84,18 +84,27 @@ class ListUsersView(BrowserView):
     def get_users(self):
         """Compile a list of users to display with selected user attributes +
         user group membership and username.
+
+        :returns: Selected (+ additional) attributes for listed users
+        :rtype: Dictionary of selected users' attributes
         """
         # Just a precaution
-        if not self.request.get('form.widgets.user_attributes'):
+        attrs = self.request.get('form.widgets.user_attributes')
+        if not attrs:
             logger.warning('User has not selected any user attributes.')
+            return []
+
+        # Just a precaution
+        groups = self.request.get('form.widgets.groups')
+        if not groups:
+            logger.warning('User has not selected any groups.')
             return []
 
         gtool = getToolByName(self.context, 'portal_groups')
         results = {}
-
-        for user in self._get_users_for_selected_groups():
+        for user in self.get_groups_members(groups):
             result = []
-            for attr in self.request.get('form.widgets.user_attributes'):
+            for attr in attrs:
                 if attr == 'username':
                     result.append(user.getId())
                 elif attr == 'groups':
@@ -111,19 +120,18 @@ class ListUsersView(BrowserView):
 
         return results
 
-    def _get_users_for_selected_groups(self):
-        """Get a list of users for the selected groups."""
+    def get_groups_members(self, groups):
+        """Get a list of users for the selected groups.
 
-        # Just a precaution
-        if not self.request.get('form.widgets.groups'):
-            logger.warning('User has not selected any groups.')
-            return []
-
+        :param groups: List of group ids to get members for
+        :type groups: List of strings
+        :returns: List of users that are members of these groups
+        :rtype: List of user objects
+        """
         gtool = getToolByName(self.context, 'portal_groups')
-        group_ids = self.request.get('form.widgets.groups')
-        users = set()
 
-        for group_id in group_ids:
+        users = set()
+        for group_id in groups:
             group = gtool.getGroupById(group_id)
             users.update(group.getGroupMembers())
 

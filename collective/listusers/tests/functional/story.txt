@@ -28,6 +28,7 @@ List some users
 
     Go to List Users view.
     >>> browser.open(portal.absolute_url() + '/@@listusers')
+    >>> import pdb; pdb.set_trace()
 
     TODO: continue here when you have changed multiselect widget into a normal
     selection widget

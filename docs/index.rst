@@ -1,19 +1,13 @@
 .. include:: README.rst
 
-Translations
-============
+Table of Contents
+=================
 
-Rebuild POT:
+.. toctree::
+   :maxdepth: 2
 
-.. code-block:: sh
-
-    $ i18ndude rebuild-pot --pot locales/collective.listusers.pot --create collective.listusers .
-
-Sync a translation file with POT:
-
-.. code-block:: sh
-
-    $ find locales -name '*.po' -exec i18ndude sync --pot locales/collective.listusers.pot {} \;
+   api.rst
+   translations.rst
 
 
 .. include:: FUTURE.rst

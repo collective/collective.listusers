@@ -16,6 +16,10 @@ class UserAttributesVocabulary(object):
     implements(IVocabularyFactory)
 
     def __call__(self, context):
+        """Build a vocabulary of user attributes. Get them from the
+        IUserDataSchemaProvider utility and add additional ones to support
+        extra functionality.
+        """
         schema_provider = getUtility(IUserDataSchemaProvider)
         schema = schema_provider.getSchema()
         user_attributes = getFieldNames(schema)
