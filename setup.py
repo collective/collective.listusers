@@ -10,7 +10,7 @@ version = read('collective', 'listusers', 'version.txt').strip()
 setup(name='collective.listusers',
       version=version,
       description="A search form for listing users.",
-      long_description=open('README.rst').read() + "\n" +
+      long_description=read('docs', 'README.rst') + "\n" +
           read('docs', 'FUTURE.rst') + "\n" +
           read('docs', 'CREDITS.rst') + "\n" +
           read('docs', 'HISTORY.rst') + "\n" +
