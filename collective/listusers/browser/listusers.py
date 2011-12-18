@@ -27,7 +27,7 @@ class ListUsersForm(form.Form):
     # usable for edit forms, where you have an actual context
     ignoreContext = True
 
-    @button.buttonAndHandler(_(u"List users"))
+    @button.buttonAndHandler(_(u"List users!"))
     def list_users(self, action):
         """Submit button handler."""
         data, errors = self.extractData()

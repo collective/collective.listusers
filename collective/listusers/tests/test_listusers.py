@@ -34,8 +34,7 @@ class TestListUsersView(IntegrationTestCase):
         listusers_view = getMultiAdapter(
             (self.portal, self.request), name=u'listusers'
         )
-        self.request.form.update(
-            {
+        self.request.form.update({
              'user_attributes': ['fullname', 'email'],
              'groups': ['Administrators']
             }

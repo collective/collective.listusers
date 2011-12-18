@@ -40,7 +40,6 @@ setup(name='collective.listusers',
       ],
       extras_require={
           'test': [
-              'manuel',
               'mock',
               'plone.app.testing',
            ],
