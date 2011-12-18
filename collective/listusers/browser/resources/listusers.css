@@ -12,8 +12,18 @@
     min-width: 100px;
 }
 
+#listusers-form .field,
 #listusers-form .formControls {
-    margin-bottom: 50px;
+    float: left;
+    clear: none;
+    width: 40%;
+    min-width: 390px;
+}
+
+#listusers-form .formControls {
+    width: 100px;
+    min-width: 100px;
+    margin-top: 69px;
 }
 
 #listusers-form .formControls #form-buttons-reset {
