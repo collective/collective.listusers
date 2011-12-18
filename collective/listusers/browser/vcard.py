@@ -22,7 +22,7 @@ class VCardView(BrowserView):
 
     def __call__(self, user_id=None):
         """Main view method that returns vcard info for a given user.
-        
+
         :returns: vcard info for a given user
         :rtype: vcard format
         """
