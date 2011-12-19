@@ -7,6 +7,7 @@ from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
 from z3c.form import field
 from z3c.form import form
@@ -88,18 +89,14 @@ class ListUsersView(BrowserView):
         :returns: Selected (+ additional) attributes for listed users
         :rtype: Dictionary of selected users' attributes
         """
-        # Just a precaution
-        attrs = self.request.get('form.widgets.user_attributes')
-        if not attrs:
-            return None
-
-        # Just a precaution
-        groups = self.request.get('form.widgets.groups')
-        if not groups:
-            return None
-
         gtool = getToolByName(self.context, 'portal_groups')
+
+        attrs = self.request.get('form.widgets.user_attributes') or []
+        groups = self.request.get('form.widgets.groups') or []
+        if not (attrs or groups):
+            return
         results = {}
+
         for user in self.get_groups_members(groups):
             result = []
             for attr in attrs:
@@ -115,6 +112,9 @@ class ListUsersView(BrowserView):
                     result.append(user.getProperty(attr, ''))
 
             results[user.getId()] = result
+
+        if not results:
+            IStatusMessage(self.request).addStatusMessage(_('Search returned no results.'), type="info")
 
         return results
 
