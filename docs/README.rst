@@ -1,4 +1,3 @@
-=============================
 Search form for listing users
 =============================
 
@@ -20,8 +19,6 @@ A clear button.
 The output is a table, that needs to support sorting for each
 column. Columns are selected user attributes and one column with the
 user's groups.
-
-AJAX would be great, but not mandatory.
 
 They will themselves register the search form (zcml) where needed.
 
