@@ -1,1 +1,1 @@
-See `docs/README.rst <https://github.com/collective/collective.listusers/blob/master/docs/README.rst>`_
+/home/cfl/.repos/collective.listusers/docs/README.rst
