@@ -1,0 +1,53 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2011-12-21 08:15+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: ./collective/listusers/interfaces.py:26
+msgid "Groups"
+msgstr ""
+
+#: ./collective/listusers/browser/listusers.pt:26
+#: ./collective/listusers/browser/listusers.py:25
+msgid "List users"
+msgstr ""
+
+#: ./collective/listusers/browser/listusers.py:31
+msgid "List users!"
+msgstr ""
+
+#: ./collective/listusers/browser/listusers.py:39
+msgid "Reset"
+msgstr ""
+
+#: ./collective/listusers/browser/listusers.py:117
+msgid "Search returned no results."
+msgstr ""
+
+#: ./collective/listusers/interfaces.py:27
+msgid "Select groups from which you want to display users from."
+msgstr ""
+
+#: ./collective/listusers/interfaces.py:37
+msgid "Select which user attributes you want displayed in the results table."
+msgstr ""
+
+#: ./collective/listusers/interfaces.py:36
+msgid "User attributes"
+msgstr ""
+
+#: ./collective/listusers/interfaces.py:18
+msgid "You need to select at least one value."
+msgstr ""
+
