@@ -1,0 +1,62 @@
+                                Notes
+                                =====
+
+Author: Florian Friesdorf
+Date: 2011-12-22 16:22:41 CET
+
+
+Table of Contents
+=================
+1 Issues 
+    1.1 configuration registry table colums 
+    1.2 exclude AuthenticatedUsers from groups 
+    1.3 exclude vcard name from csv and copy-to-clipboard 
+    1.4 dedicated permission collective.listusers.ListUsers 
+    1.5 excel vs csv 
+2 Questions 
+    2.1 vcard needs further specification 
+3 Future 
+    3.1 dragndrop selection of table columns 
+    3.2 double click moves to other column 
+
+
+1 Issues 
+---------
+
+1.1 TODO configuration registry table colums 
+=============================================
+configure selected attributes and order
+enable/disable widget for changing table columns
+
+1.2 TODO exclude AuthenticatedUsers from groups 
+================================================
+for the selection widget as well as for table column
+
+1.3 TODO exclude vcard name from csv and copy-to-clipboard 
+===========================================================
+
+1.4 TODO dedicated permission collective.listusers.ListUsers 
+=============================================================
+
+1.5 TODO excel vs csv 
+======================
+currently has same name
+
+renaming .csv to .xls and opening with ooffice still feels like a csv
+but in binary
+
+2 Questions 
+------------
+
+2.1 TODO vcard needs further specification 
+===========================================
+only visible fields or all available fields?
+
+3 Future 
+---------
+
+3.1 TODO dragndrop selection of table columns 
+==============================================
+
+3.2 TODO double click moves to other column 
+============================================
