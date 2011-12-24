@@ -103,7 +103,7 @@ class ListUsersView(BrowserView):
                 if attr == 'username':
                     result.append(user.getId())
                 elif attr == 'groups':
-                    result.append(", ".join(gtool.getGroupsForPrincipal(user)))
+                    result.append(", ".join(sorted(gtool.getGroupsForPrincipal(user))))
                 elif attr == 'vcard':
                     # Do nothing, we will render the vcard link manually in the
                     # template.
