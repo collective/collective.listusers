@@ -4,6 +4,11 @@
     xmlns:zope="http://namespaces.zope.org/zope"
     i18n_domain="collective.listusers">
 
+  <permission
+      id="collective.listusers.ListUsers"
+      title="collective.listusers: List users"
+      />
+
   <!-- Publish static media files -->
   <browser:resourceDirectory
     name="collective.listusers"
@@ -15,7 +20,7 @@
     name="listusersform"
     for="plone.app.layout.navigation.interfaces.INavigationRoot"
     class=".listusers.ListUsersForm"
-    permission="zope2.ManageUsers"
+    permission="collective.listusers.ListUsers"
     layer="collective.listusers.interfaces.IListUsersLayer"
     />
 
@@ -24,7 +29,7 @@
     name="listusers"
     for="plone.app.layout.navigation.interfaces.INavigationRoot"
     class=".listusers.ListUsersView"
-    permission="zope2.ManageUsers"
+    permission="collective.listusers.ListUsers"
     layer="collective.listusers.interfaces.IListUsersLayer"
     />
 
@@ -33,7 +38,7 @@
     name="vcard"
     for="*"
     class=".vcard.VCardView"
-    permission="zope2.ManageUsers"
+    permission="collective.listusers.ListUsers"
     layer="collective.listusers.interfaces.IListUsersLayer"
     />
 </configure>
