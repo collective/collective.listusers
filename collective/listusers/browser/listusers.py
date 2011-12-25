@@ -43,26 +43,11 @@ class ListUsersForm(form.Form):
         self.request.response.redirect(url)
 
 
-class ListUsersFormWrapper(FormWrapper):
-    """Subclass FormWrapper so that we can use a custom frame template that
-    renders only the form, nothing else.
-    """
-    index = ViewPageTemplateFile("formwrapper.pt")
 
-
-class ListUsersView(BrowserView):
+class ListUsersView(FormWrapper):
     """A BrowserView to display the ListUsersForm along with it's results."""
     index = ViewPageTemplateFile('listusers.pt')
-
-    def __init__(self, context, request):
-        """Override BrowserView's __init__ to create the ListUsersForm
-        for later use.
-        """
-        BrowserView.__init__(self, context, request)
-        self.form_wrapper = ListUsersFormWrapper(self.context, self.request)
-        self.form_wrapper.form_instance = ListUsersForm(
-            self.context, self.request
-        )
+    form = ListUsersForm
 
     def __call__(self):
         """Main view method that handles rendering."""
@@ -74,13 +59,7 @@ class ListUsersView(BrowserView):
             'attributes': self.request.get('form.widgets.user_attributes'),
             'users': self.get_users(),
         }
-        return self.index(**options)
-
-    def update(self):
-        """This is needed so that KSS validation from plone.app.z3cform works
-        as expected.
-        """
-        self.form_wrapper.form_instance.update()
+        return super(ListUsersView, self).__call__()
 
     def get_users(self):
         """Compile a list of users to display with selected user attributes +
