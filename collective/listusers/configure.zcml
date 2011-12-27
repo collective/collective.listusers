@@ -21,5 +21,9 @@
     component=".vocabularies.UserAttributesVocabularyFactory"
     name="collective.listusers.vocabularies.UserAttributes"
     />
+  <utility
+    component=".vocabularies.FilteredGroupsVocabularyFactory"
+    name="collective.listusers.vocabularies.FilteredGroups"
+    />
 
 </configure>

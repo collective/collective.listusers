@@ -41,10 +41,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr tal:define="users python: view/options['users'].items()"
+        <tr tal:define="users python: view.options['users'].items()"
             tal:repeat="user users">
           <td tal:repeat="value python: user[1]" tal:content="value">John Smith</td>
-          <td tal:condition="python: 'vcard' in view/options['attributes']">
+          <td tal:condition="python: 'vcard' in view.options['attributes']">
             <a tal:define="user_id python: user[0]"
                  tal:attributes="href string:@@vcard?user_id=$user_id"
                  tal:content="string:${user_id}.vcf">VCard</a>

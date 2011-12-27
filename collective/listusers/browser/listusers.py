@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
 """The List Users view."""
 
+import logging
+
 from collective.listusers import ListUsersMessageFactory as _
-from collective.listusers.interfaces import IListUsersForm
+from collective.listusers.interfaces import IListUsersForm, IListUsersSettings
+from plone.registry.interfaces import IRegistry
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
-from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
 from z3c.form import field
 from z3c.form import form
+from z3c.form.field import Fields
+from zope import schema
+from zope.component import queryUtility
 
-import logging
 
 logger = logging.getLogger('collective.listusers')
 
@@ -42,6 +46,25 @@ class ListUsersForm(form.Form):
         url = self.context.portal_url() + "/@@listusers"
         self.request.response.redirect(url)
 
+    def updateWidgets(self):
+        """Hook before rendering the form"""
+        settings = queryUtility(IRegistry).forInterface(IListUsersSettings)
+
+        # filter by user attribute
+        if settings.filter_by_member_properties_vocabulary and settings.filter_by_member_properties_attribute:
+            field = schema.FrozenSet(
+                __name__="filter_by_member_properties",
+                title=u"%s" % settings.filter_by_member_properties_attribute.capitalize(),
+                description=_(u'Filter members by attribute "%s"') % settings.filter_by_member_properties_attribute,
+                value_type=schema.Choice(
+                    vocabulary=settings.filter_by_member_properties_vocabulary,
+                ),
+            )
+            self.fields += Fields(field)
+
+        super(ListUsersForm, self).updateWidgets()
+        if not settings.enable_user_attributes_widget:
+            del self.widgets['user_attributes']
 
 
 class ListUsersView(FormWrapper):
@@ -52,11 +75,17 @@ class ListUsersView(FormWrapper):
     def __call__(self):
         """Main view method that handles rendering."""
         # Hide the editable border and tabs
+        self.settings = queryUtility(IRegistry).forInterface(IListUsersSettings)
         self.request.set('disable_border', True)
 
+        if self.settings.enable_user_attributes_widget:
+            self.user_attributes = self.request.get('form.widgets.user_attributes')
+        else:
+            self.user_attributes = self.settings.default_user_attributes
+
         # Prepare display values for the template
-        options = {
-            'attributes': self.request.get('form.widgets.user_attributes'),
+        self.options = {
+            'attributes': self.user_attributes,
             'users': self.get_users(),
         }
         return super(ListUsersView, self).__call__()
@@ -70,9 +99,13 @@ class ListUsersView(FormWrapper):
         """
         gtool = getToolByName(self.context, 'portal_groups')
 
-        attrs = self.request.get('form.widgets.user_attributes') or []
+        attrs = self.user_attributes
         groups = self.request.get('form.widgets.groups') or []
         if not (attrs or groups):
+            return
+
+        if not attrs:
+            IStatusMessage(self.request).addStatusMessage(_('No user attributes predefined.'), type="error")
             return
         results = {}
 
@@ -82,7 +115,7 @@ class ListUsersView(FormWrapper):
                 if attr == 'username':
                     result.append(user.getId())
                 elif attr == 'groups':
-                    result.append(", ".join(sorted(gtool.getGroupsForPrincipal(user))))
+                    result.append(", ".join(sorted(filter(lambda g: g not in self.settings.exclude_groups, gtool.getGroupsForPrincipal(user)))))
                 elif attr == 'vcard':
                     # Do nothing, we will render the vcard link manually in the
                     # template.
@@ -107,6 +140,7 @@ class ListUsersView(FormWrapper):
         """
         gtool = getToolByName(self.context, 'portal_groups')
 
+        # TODO: better way to search for users
         users = set()
         for group_id in groups:
             group = gtool.getGroupById(group_id)
@@ -114,4 +148,9 @@ class ListUsersView(FormWrapper):
             if group:
                 users.update(group.getGroupMembers())
 
-        return list(users)
+        if self.settings.filter_by_member_properties_vocabulary and self.settings.filter_by_member_properties_attribute:
+            values = self.request.get('form.widgets.filter_by_member_properties', None)
+            attr = self.settings.filter_by_member_properties_attribute
+            return filter(lambda u: u.getProperty(attr, '') in values, users)
+        else:
+            return list(users)
