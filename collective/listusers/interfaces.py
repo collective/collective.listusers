@@ -8,8 +8,11 @@ from zope.interface import Invalid
 from zope.interface import provider
 from zope import schema
 from zope.component import queryUtility
+from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
+
+### default factories
 
 @provider(IContextAwareDefaultFactory)
 def default_user_attributes(context):
@@ -17,11 +20,32 @@ def default_user_attributes(context):
     return queryUtility(IRegistry).forInterface(IListUsersSettings).default_user_attributes
 
 
+def default_settings_user_attributes():
+    """use factory to avoid mutable defaults"""
+    return ['fullname', 'email', 'groups']
+
+
+def default_settings_exclude_groups():
+    """use factory to avoid mutable defaults"""
+    return ['AuthenticatedUsers']
+
+
+### validators
+
+def validate_vocabulary(value):
+    """check if dotted name really is vocabulary"""
+    if queryUtility(IVocabularyFactory, value) is None:
+        raise Invalid(_(u"Not a vocabulary: %s") % value)
+    return True
+
+
 def must_select_one_constraint(value):
     """Check that at least item was selected."""
     if len(value) == 0:
         raise Invalid(_(u"You need to select at least one value."))
     return True
+
+### interfaces
 
 
 class IListUsersLayer(Interface):
@@ -57,24 +81,6 @@ class IListUsersForm(Interface):
 class IListUsersSettings(Interface):
     """Global settings for the package"""
 
-    exclude_groups = schema.List(  # TODO: use FrozenSet once we fix https://github.com/collective/collective.elephantvocabulary/issues/1
-        title=_(u'What groups to exclude from the product'),
-        description=_(u'Select groups that should not show up in widgets or user list table'),
-        value_type=schema.Choice(
-            vocabulary='plone.app.vocabularies.Groups',
-        ),
-        default=list(('AuthenticatedUsers',)),
-    )
-    filter_by_member_properties_vocabulary = schema.DottedName(
-        title=_(u'Dotted name to Vocabulary'),
-        description=_(u'Select vocabulary used for filtering by member attribute'),
-        required=False,
-    )
-    filter_by_member_properties_attribute = schema.Choice(
-        title=_(u'User property'),
-        description=_(u'What member property to filter on based on defined vocabulary'),
-        vocabulary='collective.listusers.vocabularies.UserAttributes',
-    )
     enable_user_attributes_widget = schema.Bool(
         title=_(u"label_enable_user_attributes_widget",
                 default=u"Enable user attributes widget"),
@@ -90,6 +96,25 @@ class IListUsersSettings(Interface):
         value_type=schema.Choice(
             vocabulary='collective.listusers.vocabularies.UserAttributes',
         ),
-        #constraint=must_select_one_constraint,
-        default=list(('username', 'fullname')),
+        constraint=must_select_one_constraint,
+        defaultFactory=default_settings_user_attributes,
+    )
+    filter_by_member_properties_vocabulary = schema.DottedName(
+        title=_(u'Dotted name to Vocabulary'),
+        description=_(u'Select vocabulary used for filtering by member attribute'),
+        constraint=validate_vocabulary,
+        required=False,
+    )
+    filter_by_member_properties_attribute = schema.Choice(
+        title=_(u'User property'),
+        description=_(u'What member property to filter on based on defined vocabulary'),
+        vocabulary='collective.listusers.vocabularies.UserAttributes',
+    )
+    exclude_groups = schema.List(  # TODO: use FrozenSet once we fix https://github.com/collective/collective.elephantvocabulary/issues/1
+        title=_(u'What groups to exclude from the product'),
+        description=_(u'Select groups that should not show up in widgets or user list table'),
+        value_type=schema.Choice(
+            vocabulary='plone.app.vocabularies.Groups',
+        ),
+        defaultFactory=default_settings_exclude_groups,
     )

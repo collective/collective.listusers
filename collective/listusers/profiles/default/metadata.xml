@@ -3,5 +3,6 @@
   <version>001</version>
   <dependencies>
     <dependency>profile-collective.js.datatables:default</dependency>
+    <dependency>profile-plone.app.registry:default</dependency>
   </dependencies>
 </metadata>

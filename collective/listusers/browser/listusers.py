@@ -148,6 +148,7 @@ class ListUsersView(FormWrapper):
             if group:
                 users.update(group.getGroupMembers())
 
+        # filter further by attribute if enabled
         if self.settings.filter_by_member_properties_vocabulary and self.settings.filter_by_member_properties_attribute:
             values = self.request.get('form.widgets.filter_by_member_properties', None)
             attr = self.settings.filter_by_member_properties_attribute

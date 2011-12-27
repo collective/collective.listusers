@@ -9,6 +9,14 @@
       title="collective.listusers: List users"
       />
 
+  <!-- Control panel -->
+  <browser:page
+      name="listusers-settings"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class="..controlpanel.ListUsersSettingsControlPanel"
+      permission="collective.listusers.ListUsers"
+      />
+
   <!-- Publish static media files -->
   <browser:resourceDirectory
     name="collective.listusers"
