@@ -33,9 +33,12 @@ setup(name='collective.listusers',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
+          'collective.elephantvocabulary',
           'collective.js.datatables',
           'plone.app.z3cform',
+          'plone.app.vocabularies',
           'setuptools',
+          'zope.schema>=3.8.0',  # required to use IContextAwareDefaultFactory
       ],
       extras_require={
           'test': [
