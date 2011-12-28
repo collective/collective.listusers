@@ -1,0 +1,23 @@
+* Notes
+** Issues
+*** TODO configuration registry table colums
+configure selected attributes and order
+enable/disable widget for changing table columns
+*** TODO configuration registry user attr and vocabulary for further filtering 
+*** TODO exclude AuthenticatedUsers from groups
+for the selection widget as well as for table column
+*** TODO exclude vcard name from csv and copy-to-clipboard
+*** TODO dedicated permission collective.listusers.ListUsers
+*** TODO excel vs csv
+currently has same name
+
+renaming .csv to .xls and opening with ooffice still feels like a csv
+but in binary
+*** TODO order groups in table alphabetically
+** Questions
+*** TODO vcard needs further specification
+only visible fields or all available fields?
+** Future
+*** TODO dragndrop selection of table columns
+*** TODO double click moves to other column
+*** TODO drop-down with existing vocabularies
