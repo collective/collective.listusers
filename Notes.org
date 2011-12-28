@@ -1,23 +1,41 @@
 * Notes
 ** Issues
-*** TODO configuration registry table colums
+*** DONE configuration registry table colums
+CLOSED: [2011-12-28 Wed 20:21]
 configure selected attributes and order
 enable/disable widget for changing table columns
 *** TODO configuration registry user attr and vocabulary for further filtering 
-*** TODO exclude AuthenticatedUsers from groups
+almost done - plone.app.registry conflicts with jquerytools overlay
+*** DONE exclude AuthenticatedUsers from groups
+CLOSED: [2011-12-28 Wed 20:19]
 for the selection widget as well as for table column
-*** TODO exclude vcard name from csv and copy-to-clipboard
-*** TODO dedicated permission collective.listusers.ListUsers
-*** TODO excel vs csv
+*** DONE exclude vcard name from csv and copy-to-clipboard
+CLOSED: [2011-12-28 Wed 20:21]
+*** DONE dedicated permission collective.listusers.ListUsers
+CLOSED: [2011-12-28 Wed 20:22]
+*** DONE excel vs csv
+CLOSED: [2011-12-28 Wed 20:22]
 currently has same name
 
 renaming .csv to .xls and opening with ooffice still feels like a csv
 but in binary
-*** TODO order groups in table alphabetically
+*** DONE order groups in table alphabetically
+CLOSED: [2011-12-28 Wed 20:22]
+*** DONE additional widget for user attr filtering
+CLOSED: [2011-12-28 Wed 20:25]
+- based on user attribute that hooks up to a vocabulary
+- registry should be able to configure vocabulary (maybe a string or
+  dropdown if it's not too much work)
+- display widget if and if vocabulary is defined
+- registry for which user attribute to filter with
+not tested yet
 ** Questions
 *** TODO vcard needs further specification
 only visible fields or all available fields?
 ** Future
 *** TODO dragndrop selection of table columns
-*** TODO double click moves to other column
+*** DONE double click moves to other column
+CLOSED: [2011-12-28 Wed 20:02]
+upstream done - double click moves to other column
++https://bugs.launchpad.net/z3c.form/+bug/908993
 *** TODO drop-down with existing vocabularies
