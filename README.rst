@@ -1,1 +1,1 @@
-/home/cfl/.repos/collective.listusers/docs/README.rst
+docs/README.rst
