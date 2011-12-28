@@ -152,6 +152,6 @@ class ListUsersView(FormWrapper):
         if self.settings.filter_by_member_properties_vocabulary and self.settings.filter_by_member_properties_attribute:
             values = self.request.get('form.widgets.filter_by_member_properties', None)
             attr = self.settings.filter_by_member_properties_attribute
-            return filter(lambda u: u.getProperty(attr, '') in values, users)
-        else:
-            return list(users)
+            if values:
+                return filter(lambda u: u.getProperty(attr, '') in values, users)
+        return list(users)
