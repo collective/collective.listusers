@@ -1,0 +1,8 @@
+#listusers-form, .DTTT_container, .dataTables_length, .dataTables_filter, .dataTables_info, .dataTables_paginate {
+    display: none;
+}
+#portal-logo {
+    display: block;
+    border-bottom: none;
+}
+#example th { text-align: left }
