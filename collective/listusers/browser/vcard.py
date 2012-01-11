@@ -2,17 +2,14 @@
 
 from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
+from zope.interface import implements
+from zope.component import getUtility
+
+from collective.listusers.interfaces import IMapUserAttributesToVCardUtility
+
 
 VCARD_TEMPLATE = """BEGIN:VCARD
-FN:%s
-N:%s
-ORG:%s
-ADR:%s;%s
-TEL;type=WORK:%s
-TEL;type=CELL:%s
-EMAIL:%s
-TITLE:%s
-NOTE:%s
+%s
 END:VCARD
 """
 
@@ -32,22 +29,30 @@ class VCardView(BrowserView):
         acl_users = getToolByName(self.context, 'acl_users')
         user = acl_users.getUserById(user_id)
 
-        vcard = VCARD_TEMPLATE % (
-            user.getProperty('fullname', ''),
-            user.getProperty('fullname', ''),
-            user.getProperty('organization', ''),
-            user.getProperty('location', ''),
-            user.getProperty('location', ''),
-            user.getProperty('phone', ''),
-            user.getProperty('cellphone', ''),
-            user.getProperty('email', ''),
-            user.getProperty('jobtitle', ''),
-            user.getProperty('description', ''),
-        )
+        attributes = getUtility(IMapUserAttributesToVCardUtility)().get_vcard_attributes(user)
+        vcard = VCARD_TEMPLATE % '\n'.join(attributes)
 
         self.request.response.setHeader('Content-Type', 'text/x-vcard')
         self.request.response.setHeader(
-            "Content-disposition", "attachment;filename=%s.vcf" % user.getId()
+            "Content-disposition",
+            "attachment;filename=%s.vcf" % user.getId()
         )
 
         return vcard
+
+
+class MapUserAttributesToVCardUtility(object):
+    implements(IMapUserAttributesToVCardUtility)
+
+    def get_vcard_attributes(self, user):
+        return (
+            "FN:%s" % user.getProperty('fullname', ''),
+            "N:%s" % user.getProperty('fullname', ''),
+            "ORG:%s" % user.getProperty('organization', ''),
+            "ADR:%s;%s" % (user.getProperty('location', ''), user.getProperty('location', '')),
+            "TEL;type=WORK:%s" % user.getProperty('phone', ''),
+            "TEL;type=CELL:%s" % user.getProperty('cellphone', ''),
+            "EMAIL:%s" % user.getProperty('email', ''),
+            "TITLE:%s" % user.getProperty('jobtitle', ''),
+            "NOTE:%s" % user.getProperty('description', ''),
+        )

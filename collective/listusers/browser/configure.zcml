@@ -49,4 +49,9 @@
     permission="collective.listusers.ListUsers"
     layer="collective.listusers.interfaces.IListUsersLayer"
     />
+
+  <utility
+    component=".vcard.MapUserAttributesToVCardUtility"
+    provides="..interfaces.IMapUserAttributesToVCardUtility"
+    />
 </configure>

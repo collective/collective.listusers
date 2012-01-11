@@ -48,6 +48,13 @@ def must_select_one_constraint(value):
 ### interfaces
 
 
+class IMapUserAttributesToVCardUtility(Interface):
+    """Marker interface"""
+
+    def get_vcard_attributes(self):
+        """List of vcard attributes"""
+
+
 class IListUsersLayer(Interface):
     """Marker interface for defining a Zope 3 browser layer."""
 
