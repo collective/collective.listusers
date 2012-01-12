@@ -51,7 +51,7 @@ def must_select_one_constraint(value):
 class IMapUserAttributesToVCardUtility(Interface):
     """Marker interface"""
 
-    def get_vcard_attributes(self):
+    def get_vcard_attributes(self, user):
         """List of vcard attributes"""
 
 
