@@ -25,7 +25,7 @@
   <metal:main define-macro="main">
 
     <h1 class="documentFirstHeading" i18n:translate="">
-      List users
+      <span tal:replace="context/title"></span>
     </h1>
 
     <div id="listusers-form">
