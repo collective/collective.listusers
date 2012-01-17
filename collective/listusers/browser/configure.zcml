@@ -26,7 +26,7 @@
   <!-- Register list users form -->
   <browser:page
     name="listusersform"
-    for="plone.app.layout.navigation.interfaces.INavigationRoot"
+    for="Products.CMFCore.interfaces.IContentish"
     class=".listusers.ListUsersForm"
     permission="collective.listusers.ListUsers"
     layer="collective.listusers.interfaces.IListUsersLayer"
@@ -35,7 +35,7 @@
   <!-- Register list users view -->
   <browser:page
     name="listusers"
-    for="plone.app.layout.navigation.interfaces.INavigationRoot"
+    for="Products.CMFCore.interfaces.IContentish"
     class=".listusers.ListUsersView"
     permission="collective.listusers.ListUsers"
     layer="collective.listusers.interfaces.IListUsersLayer"
