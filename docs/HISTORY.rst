@@ -5,5 +5,4 @@ Changelog
 ----------------
 
 - Initial release.
-  [zupo, jcerjak]
-
+  [zupo, jcerjak, iElectric, chaoflow]

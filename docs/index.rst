@@ -1,7 +1,10 @@
+.. contents::
+
 .. include:: README.rst
 
-Table of Contents
-=================
+
+Developers
+==========
 
 .. toctree::
    :maxdepth: 2
