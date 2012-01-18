@@ -23,24 +23,6 @@
     directory="resources"
     />
 
-  <!-- Register list users form -->
-  <browser:page
-    name="listusersform"
-    for="Products.CMFCore.interfaces.IContentish"
-    class=".listusers.ListUsersForm"
-    permission="collective.listusers.ListUsers"
-    layer="collective.listusers.interfaces.IListUsersLayer"
-    />
-
-  <!-- Register list users view -->
-  <browser:page
-    name="listusers"
-    for="Products.CMFCore.interfaces.IContentish"
-    class=".listusers.ListUsersView"
-    permission="collective.listusers.ListUsers"
-    layer="collective.listusers.interfaces.IListUsersLayer"
-    />
-
   <!-- Register VCard view -->
   <browser:page
     name="vcard"
