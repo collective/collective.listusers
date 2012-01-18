@@ -4,7 +4,8 @@
 CLOSED: [2011-12-28 Wed 20:21]
 configure selected attributes and order
 enable/disable widget for changing table columns
-*** TODO configuration registry user attr and vocabulary for further filtering 
+*** DONE configuration registry user attr and vocabulary for further filtering 
+CLOSED: [2012-01-18 Wed 14:21]
 almost done - plone.app.registry conflicts with jquerytools overlay
 *** DONE exclude AuthenticatedUsers from groups
 CLOSED: [2011-12-28 Wed 20:19]
@@ -30,12 +31,13 @@ CLOSED: [2011-12-28 Wed 20:25]
 - registry for which user attribute to filter with
 not tested yet
 ** Questions
-*** TODO vcard needs further specification
+*** DONE vcard needs further specification
+CLOSED: [2012-01-18 Wed 14:21]
 only visible fields or all available fields?
 ** Future
-*** TODO dragndrop selection of table columns
 *** DONE double click moves to other column
 CLOSED: [2011-12-28 Wed 20:02]
 upstream done - double click moves to other column
 +https://bugs.launchpad.net/z3c.form/+bug/908993
+*** TODO dragndrop selection of table columns
 *** TODO drop-down with existing vocabularies
