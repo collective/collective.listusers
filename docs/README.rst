@@ -21,4 +21,8 @@ Then, install `collective.listusers` using the Add-ons control panel.
 Usage
 =====
 
-View gets title information from context, so access it anywhere like http://localhost:8080/Plone/folder-1/@@listusers. There is custom permission 'collective.listusers: List users' which needs to be assigned to role/group to access the view. Before usage be sure to check configuration options in control panel under addons.
+View gets title information from context, so access it anywhere like
+http://localhost:8080/Plone/folder-1/@@listusers. There is custom
+permission 'collective.listusers: List users' which needs to be
+assigned to role/group to access the view. Before usage be sure to
+check configuration options in control panel under addons.
