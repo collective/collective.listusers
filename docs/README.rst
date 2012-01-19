@@ -26,3 +26,14 @@ http://localhost:8080/Plone/folder-1/@@listusers. There is custom
 permission 'collective.listusers: List users' which needs to be
 assigned to role/group to access the view. Before usage be sure to
 check configuration options in control panel under addons.
+
+
+Customizing
+===========
+
+VCard attributes
+----------------
+
+VCard attributes are generated from utility.
+Interface can be found at :func:`collective.listusers.interfaces.IMapUserAttributesToVCardUtility`
+and default implementation at :func:`collective.listusers.vcard.MapUserAttributesToVCardUtility`.
