@@ -1,14 +1,11 @@
+import os
 from setuptools import setup, find_packages
 
 
 setup(name='collective.listusers',
       version="0.1",
       description="A search form for listing users.",
-      long_description="""
-        * `Documentation @ ReadTheDocs <http://readthedocs.org/docs/collectivelistusers>`_
-        * `Source code @ GitHub <http://github.com/collective/collective.listusers>`_
-        * `Releases @ PyPI <http://pypi.python.org/pypi/collective.listusers>`_
-      """,
+      long_description=os.path.join(os.path.dirname(__file__), 'README.rst'),
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
