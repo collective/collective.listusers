@@ -20,4 +20,8 @@ To override, create `overrides.zcml` and configure your own utility providing th
 View adapters
 -------------
 
-If you want to reconfigure view adapters, just subclass :class:`collective.listusers.interfaces.IListUsersLayer` and register your own adapters.
+By default the view is registered at /listusers. If you don't like that:
+
+* use http://pypi.python.org/pypi/z3c.unconfigure
+* subclass layer marker interface :class:`collective.listusers.interfaces.IListUsersLayer` and register your own adapters
+
