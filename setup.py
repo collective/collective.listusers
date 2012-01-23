@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 setup(name='collective.listusers',
       version="1.0",
       description="A search form for listing users.",
-      long_description=os.path.join(os.path.dirname(__file__), 'README.rst'),
+      long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst')).read(),
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
