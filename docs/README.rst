@@ -14,26 +14,15 @@ Features
 Installation
 ============
 
-To install `collective.listusers` you simply add ``collective.listusers``
-to the list of eggs in your ``buildout.cfg``, re-run buildout and restart Plone.
-Then, install `collective.listusers` using the Add-ons control panel.
+#. add ``collective.listusers``to the list of eggs in your ``buildout.cfg``
+#. re-run buildout and restart Plone.
+#. install `collective.listusers` using the Add-ons control panel.
+
 
 Usage
 =====
 
-View gets title information from context, so access it anywhere like
-http://localhost:8080/Plone/folder-1/@@listusers. There is custom
-permission 'collective.listusers: List users' which needs to be
-assigned to role/group to access the view. Before usage be sure to
-check configuration options in control panel under addons.
 
-
-Customizing
-===========
-
-VCard attributes
-----------------
-
-VCard attributes are generated from utility.
-Interface can be found at :func:`collective.listusers.interfaces.IMapUserAttributesToVCardUtility`
-and default implementation at :func:`collective.listusers.vcard.MapUserAttributesToVCardUtility`.
+* View gets title information from context, so access it anywhere like http://localhost:8080/Plone/folder-1/@@listusers.
+* There is custom permission 'collective.listusers: List users' which needs to be assigned to role/group to access the view.
+* Before usage be sure to check configuration options in control panel under addons.

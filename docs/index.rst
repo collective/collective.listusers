@@ -9,11 +9,11 @@ Developers
 .. toctree::
    :maxdepth: 2
 
+   customization.rst
    api.rst
    translations.rst
 
 
-.. include:: FUTURE.rst
 .. include:: CREDITS.rst
 .. include:: HISTORY.rst
 .. include:: LICENSE.rst

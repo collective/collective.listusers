@@ -19,3 +19,8 @@ API
 
 .. automodule:: collective.listusers.browser.listusers
     :members:
+
+----
+
+.. automodule:: collective.listusers.browser.vcard
+    :members:
