@@ -32,6 +32,24 @@
     layer="collective.listusers.interfaces.IListUsersLayer"
     />
 
+  <!-- Register list users form -->
+  <browser:page
+    name="listusersform"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class=".browser.listusers.ListUsersForm"
+    permission="collective.listusers.ListUsers"
+    layer="collective.listusers.interfaces.IListUsersLayer"
+    />
+
+  <!-- Register list users view -->
+  <browser:page
+    name="listusers"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class=".browser.listusers.ListUsersView"
+    permission="collective.listusers.ListUsers"
+    layer="collective.listusers.interfaces.IListUsersLayer"
+    />
+
   <utility
     component=".vcard.MapUserAttributesToVCardUtility"
     provides="..interfaces.IMapUserAttributesToVCardUtility"
