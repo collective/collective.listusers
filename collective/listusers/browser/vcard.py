@@ -42,6 +42,7 @@ class VCardView(BrowserView):
 
 
 class MapUserAttributesToVCardUtility(object):
+    """Utility mapping user attributes to vcard output"""
     implements(IMapUserAttributesToVCardUtility)
 
     def get_vcard_attributes(self, user):
