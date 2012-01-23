@@ -14,7 +14,7 @@ Features
 Installation
 ============
 
-#. add ``collective.listusers``to the list of eggs in your ``buildout.cfg``
+#. add `collective.listusers` to the list of eggs in your `buildout.cfg`
 #. re-run buildout and restart Plone.
 #. install `collective.listusers` using the Add-ons control panel.
 
