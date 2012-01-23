@@ -13,9 +13,8 @@ To override, create `overrides.zcml` and configure your own utility providing th
 User attribute filter vocabulary
 --------------------------------
 
-In control panel, administrator must provide vocabulary upon which user attribute is matched during filtering.
+In control panel, administrator can provide a vocabulary as base for a user attribute filter widget.
 
-To override, create `overrides.zcml` and configure your own utility providing the interface.
 
 View adapters
 -------------
