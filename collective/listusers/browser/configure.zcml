@@ -36,7 +36,7 @@
   <browser:page
     name="listusersform"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-    class=".browser.listusers.ListUsersForm"
+    class=".listusers.ListUsersForm"
     permission="collective.listusers.ListUsers"
     layer="collective.listusers.interfaces.IListUsersLayer"
     />
@@ -45,7 +45,7 @@
   <browser:page
     name="listusers"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-    class=".browser.listusers.ListUsersView"
+    class=".listusers.ListUsersView"
     permission="collective.listusers.ListUsers"
     layer="collective.listusers.interfaces.IListUsersLayer"
     />
