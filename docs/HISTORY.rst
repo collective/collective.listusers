@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.2 (unreleased)
+----------------
+
+- Made the display table more flexible so that the vcard does no longer have to
+  be the last item [pysailor]
+
 1.1 (2012/01/25)
 ----------------
 
