@@ -110,18 +110,20 @@ class ListUsersView(FormWrapper):
         results = {}
 
         for user in self.get_groups_members(groups):
-            result = []
+            result = dict()
             for attr in attrs:
                 if attr == 'username':
-                    result.append(user.getId())
+                    result[attr] = user.getId()
                 elif attr == 'groups':
-                    result.append(", ".join(sorted(filter(lambda g: g not in self.settings.exclude_groups, gtool.getGroupsForPrincipal(user)))))
+                    result[attr] = ", ".join(sorted(filter(lambda g:
+                        g not in self.settings.exclude_groups,
+                        gtool.getGroupsForPrincipal(user))))
                 elif attr == 'vcard':
-                    # Do nothing, we will render the vcard link manually in the
-                    # template.
-                    pass
+                    # Only save the user_id, we will render the vcard link
+                    # manually in the template.
+                    result[attr] = user.getId()
                 else:
-                    result.append(user.getProperty(attr, ''))
+                    result[attr] = user.getProperty(attr, '')
 
             results[user.getId()] = result
 

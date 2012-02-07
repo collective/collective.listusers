@@ -42,14 +42,16 @@
         </tr>
       </thead>
       <tbody>
-        <tr tal:define="users python: view.options['users'].items()"
+        <tr tal:define="users python: view.options['users'].values()"
             tal:repeat="user users">
-          <td tal:repeat="value python: user[1]" tal:content="value">John Smith</td>
-          <td tal:condition="python: 'vcard' in view.options['attributes']">
-            <a tal:define="user_id python: user[0]"
-                 tal:attributes="href string:@@vcard?user_id=$user_id"
-                 tal:content="string:${user_id}.vcf">VCard</a>
-          </td>
+          <span tal:repeat="attr view/options/attributes" tal:omit-tag=''>
+            <td tal:condition="python: 'vcard'!=attr" tal:content="python:user[attr]">John Smith</td>
+            <td tal:condition="python: 'vcard'==attr">
+              <a tal:define="user_id python: user[attr]"
+                   tal:attributes="href string:@@vcard?user_id=$user_id"
+                   tal:content="string:${user_id}.vcf">VCard</a>
+            </td>
+          </span>
         </tr>
       </tbody>
     </table>
