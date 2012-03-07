@@ -84,6 +84,11 @@ class IListUsersForm(Interface):
         required=True,
     )
 
+    search_fullname = schema.TextLine(
+        title=_(u'Search'),
+        required=False,
+    )
+
 
 class IListUsersSettings(Interface):
     """Global settings for the package"""

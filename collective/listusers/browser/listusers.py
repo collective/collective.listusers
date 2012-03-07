@@ -101,6 +101,7 @@ class ListUsersView(FormWrapper):
 
         attrs = self.user_attributes
         groups = self.request.get('form.widgets.groups') or []
+        search_fullname = self.request.get('form.widgets.search_fullname', '')
         if not (attrs or groups):
             return
 
@@ -111,6 +112,11 @@ class ListUsersView(FormWrapper):
 
         for user in self.get_groups_members(groups):
             result = dict()
+
+            # do fullname search
+            if search_fullname and search_fullname not in user.getProperty('fullname', ''):
+                continue
+
             for attr in attrs:
                 if attr == 'username':
                     result[attr] = user.getId()
