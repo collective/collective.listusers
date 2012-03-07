@@ -72,8 +72,9 @@ class ListUsersView(FormWrapper):
     index = ViewPageTemplateFile('listusers.pt')
     form = ListUsersForm
 
-    def __call__(self):
+    def update(self):
         """Main view method that handles rendering."""
+        super(ListUsersView, self).update()
         # Hide the editable border and tabs
         self.settings = queryUtility(IRegistry).forInterface(IListUsersSettings)
         self.request.set('disable_border', True)
@@ -88,7 +89,6 @@ class ListUsersView(FormWrapper):
             'attributes': self.user_attributes,
             'users': self.get_users(),
         }
-        return super(ListUsersView, self).__call__()
 
     def get_users(self):
         """Compile a list of users to display with selected user attributes +
