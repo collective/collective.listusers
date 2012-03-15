@@ -66,7 +66,6 @@ class IListUsersForm(Interface):
         title=_(u'Groups'),
         description=_(u'Select groups from which you want to display users ' \
             'from.'),
-        constraint=must_select_one_constraint,
         value_type=schema.Choice(
             vocabulary='collective.listusers.vocabularies.FilteredGroups'
         )

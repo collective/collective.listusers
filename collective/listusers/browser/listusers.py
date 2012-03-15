@@ -75,9 +75,16 @@ class ListUsersView(FormWrapper):
     def update(self):
         """Main view method that handles rendering."""
         super(ListUsersView, self).update()
+
         # Hide the editable border and tabs
         self.settings = queryUtility(IRegistry).forInterface(IListUsersSettings)
+
         self.request.set('disable_border', True)
+        self.gtool = getToolByName(self.context, 'portal_groups')
+
+        self.groups = self.request.get('form.widgets.groups') or []
+        self.filter_by_member_properties = self.request.get('form.widgets.filter_by_member_properties', None)
+        self.search_fullname = self.request.get('form.widgets.search_fullname')
 
         if self.settings.enable_user_attributes_widget:
             self.user_attributes = self.request.get('form.widgets.user_attributes')
@@ -85,58 +92,60 @@ class ListUsersView(FormWrapper):
             self.user_attributes = self.settings.default_user_attributes
 
         # Prepare display values for the template
-        self.options = {
-            'attributes': self.user_attributes,
-            'users': self.get_users(),
-        }
+        if self.context.REQUEST.method == 'POST':
+            if not self.user_attributes:
+                IStatusMessage(self.request).addStatusMessage(_('No user attributes predefined.'), type="error")
+                return
+
+            self.options = {
+                'attributes': self.user_attributes,
+                'users': self.get_users(),
+            }
 
     def get_users(self):
-        """Compile a list of users to display with selected user attributes +
-        user group membership and username.
+        """Compile a list of users to display with selected user attributes
 
         :returns: Selected (+ additional) attributes for listed users
         :rtype: Dictionary of selected users' attributes
         """
-        gtool = getToolByName(self.context, 'portal_groups')
+        no_users = True
+        for user in self.get_groups_members(self.groups):
+            no_users = False
+            user_data = self.extract_user_data(user)
+            if user_data:
+                yield user_data
 
-        attrs = self.user_attributes
-        groups = self.request.get('form.widgets.groups') or []
-        search_fullname = self.request.get('form.widgets.search_fullname', '')
-        if not (attrs or groups):
-            return
-
-        if not attrs:
-            IStatusMessage(self.request).addStatusMessage(_('No user attributes predefined.'), type="error")
-            return
-        results = {}
-
-        for user in self.get_groups_members(groups):
-            result = dict()
-
-            # do fullname search
-            if search_fullname and search_fullname not in user.getProperty('fullname', ''):
-                continue
-
-            for attr in attrs:
-                if attr == 'username':
-                    result[attr] = user.getId()
-                elif attr == 'groups':
-                    result[attr] = ", ".join(sorted(filter(lambda g:
-                        g not in self.settings.exclude_groups,
-                        gtool.getGroupsForPrincipal(user))))
-                elif attr == 'vcard':
-                    # Only save the user_id, we will render the vcard link
-                    # manually in the template.
-                    result[attr] = user.getId()
-                else:
-                    result[attr] = user.getProperty(attr, '')
-
-            results[user.getId()] = result
-
-        if not results:
+        if no_users:
             IStatusMessage(self.request).addStatusMessage(_('Search returned no results.'), type="info")
 
-        return results
+    def extract_user_data(self, user):
+        """Retrieve dictionary data for template from user object"""
+        result = dict()
+
+        # filter by attribute if enabled
+        if self.settings.filter_by_member_properties_vocabulary and \
+           self.settings.filter_by_member_properties_attribute and \
+           self.filter_by_member_properties and \
+           user.getProperty(self.settings.filter_by_member_properties_attribute, '') not in self.filter_by_member_properties:
+            return
+
+        # do fullname search
+        if self.search_fullname and self.search_fullname not in user.getProperty('fullname', '').lower():
+            return
+
+        for attr in self.user_attributes:
+            if attr in ['username', 'vcard']:
+                # Only save the user_id, we will render the vcard link
+                # manually in the template.
+                result[attr] = user.getId()
+            elif attr == 'groups':
+                result[attr] = ", ".join(sorted(filter(
+                    lambda g: g not in self.settings.exclude_groups, self.gtool.getGroupsForPrincipal(user)
+                )))
+            else:
+                result[attr] = user.getProperty(attr, '')
+
+        return result
 
     def get_groups_members(self, groups):
         """Get a list of users for the selected groups.
@@ -146,20 +155,39 @@ class ListUsersView(FormWrapper):
         :returns: List of users that are members of these groups
         :rtype: List of user objects
         """
-        gtool = getToolByName(self.context, 'portal_groups')
 
-        # TODO: better way to search for users
+        if not groups:
+            for user in self.context.acl_users.getUsers():
+                yield user
+
         users = set()
         for group_id in groups:
-            group = gtool.getGroupById(group_id)
+            group = self.gtool.getGroupById(group_id)
 
             if group:
                 users.update(group.getGroupMembers())
 
-        # filter further by attribute if enabled
-        if self.settings.filter_by_member_properties_vocabulary and self.settings.filter_by_member_properties_attribute:
-            values = self.request.get('form.widgets.filter_by_member_properties', None)
-            attr = self.settings.filter_by_member_properties_attribute
-            if values:
-                return filter(lambda u: u.getProperty(attr, '') in values, users)
-        return list(users)
+        for user in  iter(users):
+            yield user
+
+
+class ListLDAPUsersView(ListUsersView):
+    """Implements PAS user search with LDAP batching support"""
+    index = ViewPageTemplateFile('listldapusers.pt')
+
+    def get_users(self):
+        for user in self.context.acl_users.pasldap.users.search():
+            # TODO: respect offset/limit
+            # TODO: implements what get_users does to extract correct variables
+            # TODO: return user fullname
+            yield user
+
+
+class DetailsLDAPUsersView(ListUsersView):
+    """Implements PAS user search with LDAP batching support"""
+    index = ViewPageTemplateFile('detailsldapusers.pt')
+
+    def update(self):
+        """"""
+        super(ListUsersView, self).update()
+        # TODO: extract information from ldap user
