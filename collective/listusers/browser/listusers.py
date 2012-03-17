@@ -2,6 +2,7 @@
 """The List Users view."""
 
 import logging
+import base64
 
 from collective.listusers import ListUsersMessageFactory as _
 from collective.listusers.interfaces import IListUsersForm, IListUsersSettings
@@ -176,10 +177,27 @@ class ListLDAPUsersView(ListUsersView):
     index = ViewPageTemplateFile('listldapusers.pt')
 
     def get_users(self):
-        for user in self.context.acl_users.pasldap.users.search():
+        page_size = self.request.get('page_size', 10)
+        cookie = base64.urlsafe_b64decode(self.request.get('cookie', ''))
+        import pdb;pdb.set_trace()
+
+        groups = {}
+        for group_id in self.groups:
+            groups['memberOf'] = self.context.acl_users.pasldap.groups[group_id]
+
+        # TODO: filter attributes
+        # TODO: search fullname
+        query = dict_to_filter(groups, True) and dict_to_filter(attrdict, True)
+        users, cookie = self.context.acl_users.pasldap.users.search_paged(
+            queryFilter=query,
+            page_size=page_size,
+            cookie=cookie,
+        )
+        self.cookie = base64.urlsafe_b64encode(cookie)
             # TODO: respect offset/limit
             # TODO: implements what get_users does to extract correct variables
             # TODO: return user fullname
+        for user in users:
             yield user
 
 
