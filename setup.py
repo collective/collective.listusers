@@ -29,6 +29,7 @@ setup(name='collective.listusers',
           'plone.app.z3cform',
           'plone.app.vocabularies',
           'setuptools',
+          'pas.plugins.ldap',
           'zope.schema>=3.8.0',  # required to use IContextAwareDefaultFactory
       ],
       extras_require={
