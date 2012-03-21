@@ -8,8 +8,9 @@
       <ul id="user-listing"
           tal:define="users python: view.options['users']"
           tal:repeat="user users"> 
-        <li tal:content="user.fullname"></li>
+        <li tal:define="fullname python: user[1]['fullname']" tal:content="fullname"></li>
       </ul>
+      <input type="hidden" tal:attributes="value view/options/cookie" />
     </div>
   </body>
 </html>

@@ -50,6 +50,14 @@
     layer="collective.listusers.interfaces.IListUsersLayer"
     />
 
+  <browser:page
+    name="listldapusers"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class=".listusers.ListLDAPUsersView"
+    permission="collective.listusers.ListUsers"
+    layer="collective.listusers.interfaces.IListUsersLayer"
+    />
+
   <utility
     component=".vcard.MapUserAttributesToVCardUtility"
     provides="..interfaces.IMapUserAttributesToVCardUtility"

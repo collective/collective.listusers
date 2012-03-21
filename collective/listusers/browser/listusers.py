@@ -6,6 +6,7 @@ import base64
 
 from collective.listusers import ListUsersMessageFactory as _
 from collective.listusers.interfaces import IListUsersForm, IListUsersSettings
+from node.ext.ldap.filter import dict_to_filter
 from plone.registry.interfaces import IRegistry
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
@@ -25,6 +26,7 @@ logger = logging.getLogger('collective.listusers')
 class ListUsersForm(form.Form):
     """The List Users search form based on z3c.form."""
 
+    method = 'get'
     fields = field.Fields(IListUsersForm)
 
     label = _(u"List users")
@@ -33,8 +35,8 @@ class ListUsersForm(form.Form):
     # usable for edit forms, where you have an actual context
     ignoreContext = True
 
-    @button.buttonAndHandler(_(u"List users!"))
-    def list_users(self, action):
+    @button.buttonAndHandler(_(u"List users!"), name="listusers")
+    def submit_form(self, action):
         """Submit button handler."""
         data, errors = self.extractData()
         if errors:
@@ -92,16 +94,17 @@ class ListUsersView(FormWrapper):
         else:
             self.user_attributes = self.settings.default_user_attributes
 
+        self.options = {
+            'attributes': self.user_attributes,
+            'users': [],
+        }
         # Prepare display values for the template
-        if self.context.REQUEST.method == 'POST':
+        if self.request.get('form.buttons.listusers'):
             if not self.user_attributes:
                 IStatusMessage(self.request).addStatusMessage(_('No user attributes predefined.'), type="error")
                 return
 
-            self.options = {
-                'attributes': self.user_attributes,
-                'users': self.get_users(),
-            }
+            self.options['users'] = self.get_users()
 
     def get_users(self):
         """Compile a list of users to display with selected user attributes
@@ -178,25 +181,29 @@ class ListLDAPUsersView(ListUsersView):
 
     def get_users(self):
         page_size = self.request.get('page_size', 10)
-        cookie = base64.urlsafe_b64decode(self.request.get('cookie', ''))
-        import pdb;pdb.set_trace()
+        cookie = base64.urlsafe_b64decode(str(self.request.get('cookie', '').replace(',', '=')))
 
-        groups = {}
+        filter_ = {}
         for group_id in self.groups:
-            groups['memberOf'] = self.context.acl_users.pasldap.groups[group_id]
+            filter_['memberOf'] = self.context.acl_users.pasldap.groups[group_id]
 
-        # TODO: filter attributes
-        # TODO: search fullname
-        query = dict_to_filter(groups, True) and dict_to_filter(attrdict, True)
+        attrsmap = self.context.acl_users.pasldap.users.principal_attrmap
+
+        if self.search_fullname:
+            filter_[attrsmap['fullname']] = self.search_fullname
+
+        if self.filter_by_member_properties:
+            filter_key = self.request.get('attribute_filter_key')
+            filter_[attrsmap[filter_key]] = self.filter_by_member_properties
+
+        #query = dict_to_filter(groups, True) and dict_to_filter(attrdict, True)
         users, cookie = self.context.acl_users.pasldap.users.search_paged(
-            queryFilter=query,
-            page_size=page_size,
+            criteria=filter_,
+            page_size=int(page_size),
             cookie=cookie,
+            attrlist=['fullname'],
         )
-        self.cookie = base64.urlsafe_b64encode(cookie)
-            # TODO: respect offset/limit
-            # TODO: implements what get_users does to extract correct variables
-            # TODO: return user fullname
+        self.options['cookie'] = base64.urlsafe_b64encode(cookie).replace('=', ',')
         for user in users:
             yield user
 

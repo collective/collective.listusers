@@ -42,7 +42,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr tal:define="users python: view.options['users'].values()"
+        <tr tal:define="users python: view.options['users']"
             tal:repeat="user users">
           <span tal:repeat="attr view/options/attributes" tal:omit-tag=''>
             <td tal:condition="python: 'vcard'!=attr" tal:content="python:user[attr]">John Smith</td>
