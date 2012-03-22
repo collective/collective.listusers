@@ -6,7 +6,6 @@ import base64
 
 from collective.listusers import ListUsersMessageFactory as _
 from collective.listusers.interfaces import IListUsersForm, IListUsersSettings
-from node.ext.ldap.filter import dict_to_filter
 from plone.registry.interfaces import IRegistry
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
@@ -181,13 +180,13 @@ class ListLDAPUsersView(ListUsersView):
 
     def get_users(self):
         page_size = self.request.get('page_size', 10)
-        cookie = base64.urlsafe_b64decode(str(self.request.get('cookie', '').replace(',', '=')))
-
-        filter_ = {}
-        for group_id in self.groups:
-            filter_['memberOf'] = self.context.acl_users.pasldap.groups[group_id]
-
+        cookie = unicode(base64.urlsafe_b64decode(str(self.request.get('cookie', '').replace(',', '='))))
         attrsmap = self.context.acl_users.pasldap.users.principal_attrmap
+        filter_ = {}
+
+        # TODO: handle more groups
+        for group_id in self.groups:
+            filter_['memberOf'] = self.context.acl_users.pasldap.groups[group_id].context.DN
 
         if self.search_fullname:
             filter_[attrsmap['fullname']] = self.search_fullname
@@ -196,7 +195,7 @@ class ListLDAPUsersView(ListUsersView):
             filter_key = self.request.get('attribute_filter_key')
             filter_[attrsmap[filter_key]] = self.filter_by_member_properties
 
-        #query = dict_to_filter(groups, True) and dict_to_filter(attrdict, True)
+        # TODO: correctly handle and/or
         users, cookie = self.context.acl_users.pasldap.users.search_paged(
             criteria=filter_,
             page_size=int(page_size),
