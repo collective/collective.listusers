@@ -6,6 +6,7 @@ import base64
 
 from collective.listusers import ListUsersMessageFactory as _
 from collective.listusers.interfaces import IListUsersForm, IListUsersSettings
+from node.ext.ldap.filter import dict_to_filter
 from plone.registry.interfaces import IRegistry
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
@@ -85,7 +86,7 @@ class ListUsersView(FormWrapper):
         self.gtool = getToolByName(self.context, 'portal_groups')
 
         self.groups = self.request.get('form.widgets.groups') or []
-        self.filter_by_member_properties = self.request.get('form.widgets.filter_by_member_properties', None)
+        self.filter_by_member_properties = self.request.get('form.widgets.filter_by_member_properties', [])
         self.search_fullname = self.request.get('form.widgets.search_fullname')
 
         if self.settings.enable_user_attributes_widget:
@@ -129,7 +130,7 @@ class ListUsersView(FormWrapper):
         if self.settings.filter_by_member_properties_vocabulary and \
            self.settings.filter_by_member_properties_attribute and \
            self.filter_by_member_properties and \
-           user.getProperty(self.settings.filter_by_member_properties_attribute, '') not in self.filter_by_member_properties:
+           user.getproperty(self.settings.filter_by_member_properties_attribute, '') not in self.filter_by_member_properties:
             return
 
         # do fullname search
@@ -182,25 +183,31 @@ class ListLDAPUsersView(ListUsersView):
         page_size = self.request.get('page_size', 10)
         cookie = unicode(base64.urlsafe_b64decode(str(self.request.get('cookie', '').replace(',', '='))))
         attrsmap = self.context.acl_users.pasldap.users.principal_attrmap
-        filter_ = {}
-
-        # TODO: handle more groups
-        for group_id in self.groups:
-            filter_['memberOf'] = self.context.acl_users.pasldap.groups[group_id].context.DN
+        filter_ = []
 
         if self.search_fullname:
-            filter_[attrsmap['fullname']] = self.search_fullname
+            filter_.append(dict_to_filter({attrsmap['fullname']: self.search_fullname}, or_search=True))
 
-        if self.filter_by_member_properties:
-            filter_key = self.request.get('attribute_filter_key')
-            filter_[attrsmap[filter_key]] = self.filter_by_member_properties
+        groupsdns = []
+        for group_id in self.groups:
+            groupsdns.append(self.context.acl_users.pasldap.groups[group_id].context.DN)
+        filter_.append(dict_to_filter(dict(memberOf=groupsdns), or_search=True))
 
-        # TODO: correctly handle and/or
+        props = []
+        for property_id in self.filter_by_member_properties:
+            props.append(property_id)
+
+        if self.settings.filter_by_member_properties_vocabulary and \
+           self.settings.filter_by_member_properties_attribute and \
+           self.filter_by_member_properties and props:
+            filter_.append(dict_to_filter({attrsmap[self.settings.filter_by_member_properties_attribute]: props}, or_search=True))
+
         users, cookie = self.context.acl_users.pasldap.users.search_paged(
-            criteria=filter_,
+            criteria={'filter': filter_},
+            only_values=True,
+            attrlist=['fullname'],
             page_size=int(page_size),
             cookie=cookie,
-            attrlist=['fullname'],
         )
         self.options['cookie'] = base64.urlsafe_b64encode(cookie).replace('=', ',')
         for user in users:
