@@ -6,7 +6,6 @@ import base64
 
 from collective.listusers import ListUsersMessageFactory as _
 from collective.listusers.interfaces import IListUsersForm, IListUsersSettings
-from node.ext.ldap.filter import dict_to_filter
 from plone.registry.interfaces import IRegistry
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
@@ -180,19 +179,22 @@ class ListLDAPUsersView(ListUsersView):
     index = ViewPageTemplateFile('listldapusers.pt')
 
     def get_users(self):
+        pasldap = self.context.acl_users.pasldap
         page_size = self.request.get('page_size', 10)
         cookie = unicode(base64.urlsafe_b64decode(str(self.request.get('cookie', '').replace(',', '='))))
-        attrsmap = self.context.acl_users.pasldap.users.principal_attrmap
-        filter_ = []
+        attrsmap = pasldap.users.principal_attrmap
 
+        criteria = {}
         if self.search_fullname:
-            filter_.append(dict_to_filter({attrsmap['fullname']: self.search_fullname}, or_search=True))
+            criteria['fullname'] = self.search_fullname
 
-        groupsdns = []
         for group_id in self.groups:
-            groupsdns.append(self.context.acl_users.pasldap.groups[group_id].context.DN)
-        filter_.append(dict_to_filter(dict(memberOf=groupsdns), or_search=True))
+            criteria.setdefault('memberOf', []).append(
+                pasldap.groups[group_id].context.DN
+                )
 
+        # XXX: I think this is misleading. We filter on one property
+        # and can provide multiple values for that one property, or?
         props = []
         for property_id in self.filter_by_member_properties:
             props.append(property_id)
@@ -200,11 +202,12 @@ class ListLDAPUsersView(ListUsersView):
         if self.settings.filter_by_member_properties_vocabulary and \
            self.settings.filter_by_member_properties_attribute and \
            self.filter_by_member_properties and props:
-            filter_.append(dict_to_filter({attrsmap[self.settings.filter_by_member_properties_attribute]: props}, or_search=True))
+            criteria[self.settings.filter_by_member_properties_attribute] = props
 
-        users, cookie = self.context.acl_users.pasldap.users.search_paged(
-            criteria={'filter': filter_},
-            only_values=True,
+        users, cookie = pasldap.users.search(
+            criteria=criteria
+            or_keys=False,
+            or_values=True,
             attrlist=['fullname'],
             page_size=int(page_size),
             cookie=cookie,
