@@ -182,7 +182,6 @@ class ListLDAPUsersView(ListUsersView):
         pasldap = self.context.acl_users.pasldap
         page_size = self.request.get('page_size', 10)
         cookie = unicode(base64.urlsafe_b64decode(str(self.request.get('cookie', '').replace(',', '='))))
-        attrsmap = pasldap.users.principal_attrmap
 
         criteria = {}
         if self.search_fullname:
@@ -193,19 +192,13 @@ class ListLDAPUsersView(ListUsersView):
                 pasldap.groups[group_id].context.DN
                 )
 
-        # XXX: I think this is misleading. We filter on one property
-        # and can provide multiple values for that one property, or?
-        props = []
-        for property_id in self.filter_by_member_properties:
-            props.append(property_id)
-
         if self.settings.filter_by_member_properties_vocabulary and \
            self.settings.filter_by_member_properties_attribute and \
-           self.filter_by_member_properties and props:
-            criteria[self.settings.filter_by_member_properties_attribute] = props
+           self.filter_by_member_properties:
+            criteria[self.settings.filter_by_member_properties_attribute] = self.filter_by_member_properties
 
         users, cookie = pasldap.users.search(
-            criteria=criteria
+            criteria=criteria,
             or_keys=False,
             or_values=True,
             attrlist=['fullname'],
@@ -217,11 +210,12 @@ class ListLDAPUsersView(ListUsersView):
             yield user
 
 
-class DetailsLDAPUsersView(ListUsersView):
+class ListLDAPUserDetailsView(ListUsersView):
     """Implements PAS user search with LDAP batching support"""
     index = ViewPageTemplateFile('detailsldapusers.pt')
 
     def update(self):
         """"""
-        super(ListUsersView, self).update()
-        # TODO: extract information from ldap user
+        userid = self.request.get('userid')
+        self.options = {}
+        self.options['user'] = self.context.acl_users.getUserById(userid)

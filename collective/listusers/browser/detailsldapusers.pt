@@ -6,7 +6,7 @@
   <body>
     <div id="contact-listing">
       <dl class="profile grid">
-        <dt tal:content="user/fullname"></dt>
+        <dt tal:content="python: view.options['user'].getProperty('fullname')"></dt>
       </dl>
     </div>
   </body>
