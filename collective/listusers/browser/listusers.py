@@ -214,7 +214,7 @@ class ListLDAPUsersView(ListUsersView):
 
         It is important that get_users is called first, as that will set the new cookie.
         """
-        return '?' + urllib.urlencode(self.request.form)
+        return '?' + urllib.urlencode(self.request.form, doseq=True)
 
 class ListLDAPUserDetailsView(ListUsersView):
     """Implements PAS user search with LDAP batching support"""
