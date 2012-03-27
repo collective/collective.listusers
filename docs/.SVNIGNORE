@@ -1,6 +1,0 @@
-# Set with:
-#   svn propset svn:ignore -F docs/.SVNIGNORE docs/
-html
-doctrees
-make.bat
-Makefile
