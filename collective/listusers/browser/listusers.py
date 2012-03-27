@@ -187,15 +187,17 @@ class ListLDAPUsersView(ListUsersView):
         if self.search_fullname:
             criteria['fullname'] = self.search_fullname
 
-        for group_id in self.groups:
-            criteria.setdefault('memberOf', []).append(
-                pasldap.groups[group_id].context.DN
-                )
+        if self.groups:
+            criteria['memberOf'] = sorted([
+                    pasldap.groups[x].context.DN for x in self.groups
+                    ])
 
         if self.settings.filter_by_member_properties_vocabulary and \
            self.settings.filter_by_member_properties_attribute and \
            self.filter_by_member_properties:
-            criteria[self.settings.filter_by_member_properties_attribute] = self.filter_by_member_properties
+            criteria[self.settings.filter_by_member_properties_attribute] = sorted(
+                self.filter_by_member_properties
+                )
 
         users, cookie = pasldap.users.search(
             criteria=criteria,
