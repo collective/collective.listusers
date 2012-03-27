@@ -6,9 +6,13 @@
   <body>
     <div id="contacts">
       <ul id="user-listing"
-          tal:define="users python: view.options['users']"
-          tal:repeat="user users"> 
-        <li tal:define="fullname python: user[1]['fullname']" tal:content="fullname"></li>
+          tal:define="users python: view.options['users']"> 
+          <li tal:repeat="user users">
+            <a tal:attributes="href string: @@listldapuserdetails?userid=${href}"
+               tal:define="fullname python: user[1]['fullname'][0];
+                            href python: user[0]"
+               tal:content="fullname"></a>
+        </li>
       </ul>
       <input type="hidden" tal:attributes="value view/options/cookie" />
     </div>
