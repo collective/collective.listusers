@@ -180,8 +180,9 @@ class ListLDAPUsersView(ListUsersView):
 
     def get_users(self):
         pasldap = self.context.acl_users.pasldap
-        page_size = self.request.get('page_size', 2)
-        cookie = self.request.form.get('cookie', '')
+        page_size = int(self.request.get('page_size', 10))
+        #cookie = self.request.form.get('cookie', '')
+        cookie = int(self.request.form.get('cookie', 0) or 0)
 
         criteria = {}
         if self.search_fullname:
@@ -199,15 +200,24 @@ class ListLDAPUsersView(ListUsersView):
                 self.filter_by_member_properties
                 )
 
-        users, cookie = pasldap.users.search(
+        #users, cookie = pasldap.users.search(
+        users = pasldap.users.search(
             criteria=criteria,
             or_keys=False,
             or_values=True,
             attrlist=['fullname'],
-            page_size=int(page_size),
-            cookie=cookie,
+            #page_size=page_size,
+            #cookie=cookie,
             )
-        self.request.form['cookie'] = cookie
+
+        # TODO: we currently fake pagination with python,
+        # ldap apparently does not recycle connections corretly
+        # for this use case
+        try:
+            users = users[cookie * page_size:(cookie + 1) * page_size + 1]
+        except IndexError:
+            users = users[cookie * page_size:]
+        self.request.form['cookie'] = cookie + 1
         for user in users:
             yield user
 
@@ -217,6 +227,7 @@ class ListLDAPUsersView(ListUsersView):
         It is important that get_users is called first, as that will set the new cookie.
         """
         return '?' + urllib.urlencode(self.request.form, doseq=True)
+
 
 class ListLDAPUserDetailsView(ListUsersView):
     """Implements PAS user search with LDAP batching support"""
