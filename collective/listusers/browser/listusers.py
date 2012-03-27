@@ -2,7 +2,7 @@
 """The List Users view."""
 
 import logging
-import base64
+import urllib
 
 from collective.listusers import ListUsersMessageFactory as _
 from collective.listusers.interfaces import IListUsersForm, IListUsersSettings
@@ -180,8 +180,8 @@ class ListLDAPUsersView(ListUsersView):
 
     def get_users(self):
         pasldap = self.context.acl_users.pasldap
-        page_size = self.request.get('page_size', 10)
-        cookie = unicode(base64.urlsafe_b64decode(str(self.request.get('cookie', '').replace(',', '='))))
+        page_size = self.request.get('page_size', 2)
+        cookie = self.request.form.get('cookie', '')
 
         criteria = {}
         if self.search_fullname:
@@ -204,11 +204,17 @@ class ListLDAPUsersView(ListUsersView):
             attrlist=['fullname'],
             page_size=int(page_size),
             cookie=cookie,
-        )
-        self.options['cookie'] = base64.urlsafe_b64encode(cookie).replace('=', ',')
+            )
+        self.request.form['cookie'] = cookie
         for user in users:
             yield user
 
+    def query_more(self):
+        """Get the next page
+
+        It is important that get_users is called first, as that will set the new cookie.
+        """
+        return '?' + urllib.urlencode(self.request.form)
 
 class ListLDAPUserDetailsView(ListUsersView):
     """Implements PAS user search with LDAP batching support"""

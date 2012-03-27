@@ -14,7 +14,9 @@
                tal:content="fullname"></a>
         </li>
       </ul>
-      <input type="hidden" tal:attributes="value view/options/cookie" />
+			<p id="morecontacts">
+				<a tal:attributes="href view/query_more">More</a>
+			</p>
     </div>
   </body>
 </html>
