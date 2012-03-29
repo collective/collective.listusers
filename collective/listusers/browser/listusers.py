@@ -102,7 +102,7 @@ class ListUsersView(FormWrapper):
             if not self.user_attributes:
                 IStatusMessage(self.request).addStatusMessage(_('No user attributes predefined.'), type="error")
                 return
-
+    
             self.options['users'] = self.get_users()
 
     def get_users(self):
@@ -112,6 +112,7 @@ class ListUsersView(FormWrapper):
         :rtype: Dictionary of selected users' attributes
         """
         no_users = True
+        
         for user in self.get_groups_members(self.groups):
             no_users = False
             user_data = self.extract_user_data(user)
@@ -178,21 +179,22 @@ class ListLDAPUsersView(ListUsersView):
     """Implements PAS user search with LDAP batching support"""
     index = ViewPageTemplateFile('listldapusers.pt')
 
+    page_size = 10
+
     def get_users(self):
+        """ test """
         pasldap = self.context.acl_users.pasldap
-        page_size = int(self.request.form.get('page_size', 10))
+        page_size = int(self.request.form.get('page_size', self.page_size))
         page_idx = int(self.request.form.get('page_idx', 0) or 0)
         #cookie = self.request.form.get('cookie', '')
-
         criteria = {}
         if self.search_fullname:
             criteria['fullname'] = self.search_fullname
 
         if self.groups:
             criteria['memberOf'] = sorted([
-                    pasldap.groups[x].context.DN for x in self.groups
+                    pasldap.groups[x].context.DN for x in self.groups if x in pasldap.groups
                     ])
-
         if self.settings.filter_by_member_properties_vocabulary and \
            self.settings.filter_by_member_properties_attribute and \
            self.filter_by_member_properties:
@@ -201,6 +203,7 @@ class ListLDAPUsersView(ListUsersView):
                 )
 
         #users, cookie = pasldap.users.search(
+        
         users = pasldap.users.search(
             criteria=criteria,
             or_keys=False,
@@ -209,16 +212,17 @@ class ListLDAPUsersView(ListUsersView):
             #page_size=page_size,
             #cookie=cookie,
             )
-
         # TODO: we currently fake pagination with python,
         # ldap apparently does not recycle connections corretly
         # for this use case
+        users.sort(key=lambda x: x[1]['fullname'])
         try:
             users = users[page_idx * page_size:(page_idx + 1) * page_size]
         except IndexError:
             users = users[page_idx * page_size:]
-        for user in users:
-            yield user
+        return users
+#        for user in users:
+#            yield user
 
     def query_more(self):
         """Get the next page
