@@ -181,13 +181,12 @@ class ListLDAPUsersView(ListUsersView):
 
     page_size = 10
 
-    def get_users(self):
+    def get_users(self, criteria={}):
         """ test """
         pasldap = self.context.acl_users.pasldap
         page_size = int(self.request.form.get('page_size', self.page_size))
         page_idx = int(self.request.form.get('page_idx', 0) or 0)
         #cookie = self.request.form.get('cookie', '')
-        criteria = {}
         if self.search_fullname:
             criteria['fullname'] = self.search_fullname
 
