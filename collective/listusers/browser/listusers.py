@@ -183,7 +183,6 @@ class ListLDAPUsersView(ListUsersView):
 
     def get_users(self):
         """ test """
-        import pdb; pdb.set_trace()
         criteria={}
         pasldap = self.context.acl_users.pasldap
         page_size = int(self.request.form.get('page_size', self.page_size))
