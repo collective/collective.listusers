@@ -195,9 +195,14 @@ class ListLDAPUsersView(ListUsersView):
             criteria['fullname'] = self.search_fullname
 
         if self.groups:
-            criteria['memberOf'] = sorted([
-                    pasldap.groups[x].context.DN for x in self.groups if x in pasldap.groups
-                    ])
+            mygroups = []
+            for g in self.groups:
+                try:
+                    mygroups.append(pasldap.groups[g].context.DN)
+                except KeyError:
+                    pass            
+            criteria['memberOf'] = sorted(mygroups)
+            
         if self.settings.filter_by_member_properties_vocabulary and \
            self.settings.filter_by_member_properties_attribute and \
            self.filter_by_member_properties:
@@ -226,11 +231,21 @@ class ListLDAPUsersView(ListUsersView):
 
     def query_more(self):
         """Get the next page
-
-        It is important that get_users is called first, as that will set the new cookie.
         """
         params = self.request.form.copy()
         params['page_idx'] = int(params.get('page_idx', 0)) + 1
+        return '?' + urllib.urlencode(params, doseq=True)
+
+    def csv_url(self):
+        """Get csv download url
+        """
+        params = self.request.form.copy()
+        if 'page_idx' in params:
+            del params['page_idx']
+        if 'page_size' in params:
+            del params['page_size']
+        print params.keys()
+        
         return '?' + urllib.urlencode(params, doseq=True)
 
 
@@ -245,7 +260,7 @@ class ListLDAPUserDetailsView(ListUsersView):
         self.options['user'] = self.context.acl_users.getUserById(userid)
 
 
-class ListLDAPExportCSVView(ListUsersView):
+class ListLDAPExportCSVView(ListLDAPUsersView):
 
     def update(self):
         """"""
