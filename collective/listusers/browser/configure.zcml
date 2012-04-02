@@ -50,6 +50,7 @@
     layer="collective.listusers.interfaces.IListUsersLayer"
     />
 
+  <!-- ldap views -->
   <browser:page
     name="listldapusers"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
@@ -61,6 +62,13 @@
     name="listldapuserdetails"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
     class=".listusers.ListLDAPUserDetailsView"
+    permission="collective.listusers.ListUsers"
+    layer="collective.listusers.interfaces.IListUsersLayer"
+    />
+  <browser:page
+    name="listldapusersexportcsv"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class=".listusers.ListLDAPExportCSVView"
     permission="collective.listusers.ListUsers"
     layer="collective.listusers.interfaces.IListUsersLayer"
     />

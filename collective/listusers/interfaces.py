@@ -131,3 +131,11 @@ class IListUsersSettings(Interface):
         constraint=must_select_one_constraint,
         defaultFactory=default_settings_user_attributes,
     )
+    export_csv_attributes = schema.List(
+        title=_(u'User attributes to export'),
+        value_type=schema.Choice(
+            vocabulary='collective.listusers.vocabularies.UserAttributes',
+        ),
+        constraint=must_select_one_constraint,
+        defaultFactory=default_settings_user_attributes,
+    )

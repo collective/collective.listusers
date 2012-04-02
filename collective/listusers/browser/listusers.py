@@ -3,6 +3,8 @@
 
 import logging
 import urllib
+import csv
+import StringIO
 
 from collective.listusers import ListUsersMessageFactory as _
 from collective.listusers.interfaces import IListUsersForm, IListUsersSettings
@@ -102,7 +104,7 @@ class ListUsersView(FormWrapper):
             if not self.user_attributes:
                 IStatusMessage(self.request).addStatusMessage(_('No user attributes predefined.'), type="error")
                 return
-    
+
             self.options['users'] = self.get_users()
 
     def get_users(self):
@@ -112,7 +114,7 @@ class ListUsersView(FormWrapper):
         :rtype: Dictionary of selected users' attributes
         """
         no_users = True
-        
+
         for user in self.get_groups_members(self.groups):
             no_users = False
             user_data = self.extract_user_data(user)
@@ -180,10 +182,11 @@ class ListLDAPUsersView(ListUsersView):
     index = ViewPageTemplateFile('listldapusers.pt')
 
     page_size = 10
+    attrlist = None
 
     def get_users(self):
         """ test """
-        criteria={}
+        criteria = {}
         pasldap = self.context.acl_users.pasldap
         page_size = int(self.request.form.get('page_size', self.page_size))
         page_idx = int(self.request.form.get('page_idx', 0) or 0)
@@ -203,17 +206,16 @@ class ListLDAPUsersView(ListUsersView):
                 )
 
         #users, cookie = pasldap.users.search(
-        
         users = pasldap.users.search(
             criteria=criteria,
             or_keys=False,
             or_values=True,
-            attrlist=['fullname'],
+            attrlist=self.attrlist or ['fullname'],
             #page_size=page_size,
             #cookie=cookie,
             )
         # TODO: we currently fake pagination with python,
-        # ldap apparently does not recycle connections corretly
+        # ldap apparently does not recycle connections correctly
         # for this use case
         users.sort(key=lambda x: x[1]['fullname'])
         try:
@@ -221,8 +223,6 @@ class ListLDAPUsersView(ListUsersView):
         except IndexError:
             users = users[page_idx * page_size:]
         return users
-#        for user in users:
-#            yield user
 
     def query_more(self):
         """Get the next page
@@ -243,3 +243,26 @@ class ListLDAPUserDetailsView(ListUsersView):
         userid = self.request.get('userid')
         self.options = {}
         self.options['user'] = self.context.acl_users.getUserById(userid)
+
+
+class ListLDAPExportCSVView(ListUsersView):
+
+    def update(self):
+        """"""
+        self.settings = queryUtility(IRegistry).forInterface(IListUsersSettings)
+        self.attrlist = self.settings.export_csv_attributes
+        super(ListLDAPExportCSVView, self).update()
+
+    def render(self):
+        self.request.response.addHeader('Content-Type', "text/csv")
+        self.request.response.setHeader(
+            "Content-disposition",
+            "attachment;filename=listusers.csv"
+        )
+
+        csvfile = StringIO.StringIO()
+        csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(self.attrlist)
+        for user in self.options['users']:
+            csvwriter.writerow([user[attr] for attr in self.attrlist])
+        return csvfile.getvalue()
