@@ -29,17 +29,20 @@ class VCardView(BrowserView):
         acl_users = getToolByName(self.context, 'acl_users')
         user = acl_users.getUserById(user_id)
 
-        attributes = getUtility(IMapUserAttributesToVCardUtility)().get_vcard_attributes(user)
+        if hasattr(self, 'get_vcard_attributes'):
+            attributes = self.get_vcard_attributes(user)
+        else:
+            attributes = getUtility(IMapUserAttributesToVCardUtility)().get_vcard_attributes(user)
+
         vcard = VCARD_TEMPLATE % '\n'.join(attributes)
 
-        self.request.response.setHeader('Content-Type', 'text/x-vcard')
+        self.request.response.setHeader('Content-Type', 'text/vcard')
         self.request.response.setHeader(
             "Content-disposition",
             "attachment;filename=%s.vcf" % user.getId()
         )
 
         return vcard
-
 
 class MapUserAttributesToVCardUtility(object):
     """Utility mapping user attributes to vcard output"""
