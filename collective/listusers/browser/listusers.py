@@ -242,8 +242,8 @@ class ListLDAPUsersView(ListUsersView):
         params = self.request.form.copy()
         if 'page_idx' in params:
             del params['page_idx']
-        if 'page_size' in params:
-            del params['page_size']
+        #with csv, we want to have no batching. 
+        params['page_size'] = 99999999
         print params.keys()
         
         return '?' + urllib.urlencode(params, doseq=True)
