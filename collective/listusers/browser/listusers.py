@@ -210,19 +210,28 @@ class ListLDAPUsersView(ListUsersView):
                 self.filter_by_member_properties
                 )
 
+        sortby = getattr(self, 'sortby', None) or ['fullname']
+        attrlist = list(
+            set(self.attrlist or ['fullname']).union(set(sortby))
+            )
+
         #users, cookie = pasldap.users.search(
         users = pasldap.users.search(
             criteria=criteria,
             or_keys=False,
             or_values=True,
-            attrlist=self.attrlist or ['fullname'],
+            attrlist=attrlist,
             #page_size=page_size,
             #cookie=cookie,
             )
+
+        # XXX: check whether we can offload sorting to the ldap server
+        # missing attribute will sort to the end (for that attribute)
+        users.sort(key=lambda x: [x[1].get(attr, 'zzzzzz') for attr in sortby])
+
         # TODO: we currently fake pagination with python,
         # ldap apparently does not recycle connections correctly
         # for this use case
-        users.sort(key=lambda x: x[1]['fullname'])
         try:
             users = users[page_idx * page_size:(page_idx + 1) * page_size]
         except IndexError:
