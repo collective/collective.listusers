@@ -4,6 +4,7 @@ Changelog
 1.2 (unreleased)
 ----------------
 
+- Added support to sort uer results [chaoflow]
 - Made the display table more flexible so that the vcard does no longer have to
   be the last item [pysailor]
 
