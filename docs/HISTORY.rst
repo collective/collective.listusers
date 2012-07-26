@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2 (unreleased)
+1.2 (2012-07-26)
 ----------------
 
 - Added support to sort uer results [chaoflow]
