@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 
 setup(name='collective.listusers',
-      version='1.3.dev0',
+      version='1.3',
       description="A search form for listing users.",
       long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst')).read(),
       # Get more strings from
